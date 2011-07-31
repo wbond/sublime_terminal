@@ -3,6 +3,7 @@ import sublime_plugin
 import os
 import sys
 import subprocess
+import stat
 
 
 class TerminalSelector():
@@ -26,7 +27,8 @@ class TerminalSelector():
 				default = os.environ['SYSTEMROOT'] + '\\System32\\cmd.exe'
 		
 		elif sys.platform == 'darwin':
-			default = '/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal'
+			default = os.path.join(sublime.packages_path(), __name__, 'Terminal.sh')
+			os.chmod(default, 0755)
 		
 		else:
 			wm = [x.replace("\n", '') for x in os.popen('ps -eo comm | grep -E "gnome-session|ksmserver|xfce4-session" | grep -v grep')]
@@ -50,7 +52,8 @@ class TerminalCommand():
 			if not dir:
 				raise NotFoundError('The file open in the selected view has not yet been saved')
 			ForkGui(TerminalSelector.get(), dir)
-		except (OSError):
+		except (OSError) as (exception):
+			print str(exception)
 			sublime.error_message('Terminal: The terminal ' + TerminalSelector.get() + ' was not found')
 		except (Exception) as (exception):
 			sublime.error_message('Terminal: ' + str(exception))
