@@ -1,0 +1,63 @@
+= Sublime Terminal
+
+A Sublime Text 2 (http://www.sublimetext.com/2) plugin that provides a key-bindings and menu entries for launching a terminal at a given file or folder.
+
+== Installation
+
+Simply clone the repository into a new "Terminal" folder in the Sublime Text 2 Packages directory on your machine. The Packages directory can be found via the "Preferences > Browse Packages..." menu entry.
+
+== Usage
+
+Sublime Terminal can perform two things:
+
+* Launch terminal in folder containing current file
+* Launch terminal in the project folder containing current file
+
+The project folder is the folder that was added to the project that contains the file.
+
+For instance, if {{{/home/will/wbond.net}}} was added to the current project via //Project > Add Folder to Project…// and ctrl+shift+t was pressed while editing {{{/home/will/wbond.net/css/main.css}}}, then a terminal would be opened at {{{/home/will/wbond.net/css/}}}. If ctrl+shift+alt+t was pressed while editing the same file, it would open at {{{/home/will/wbond.net}}} since that was the folder added to the project.
+
+=== Key Bindings
+
+* Current file terminal: ctrl+shift+t (Windows, Linux) or cmd+shift+t (OS X)
+* Project folder terminal: ctrl+shift+alt+t (Windows, Linux) or cmd+shift+alt+t (OS X)
+
+Key bindings can be customized by accessing the //Preferences > Package Preferences > Terminal Key Bindings// menu.
+
+=== Context Menus
+
+There are context menu entries in the editor view and the sidebar for opening a terminal at any of those locations.
+
+=== Terminal Command
+
+By default, Sublime Terminal will open the standard terminal for the current operating system:
+
+* Windows: Powershell, or cmd
+* OS X: Terminal
+* Linux: gnome-terminal (Gnome), konsole (KDE), xfce4-terminal (XFCE), xterm
+
+A custom terminal command can be used by accessing the //Preferences > Package Preferences > Terminal Settings// menu.
+
+== License
+
+All of Sublime Terminal is licensed under the MIT license.
+
+  Copyright (c) 2011 Will Bond <will@wbond.net>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  THE SOFTWARE.
