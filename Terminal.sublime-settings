@@ -1,0 +1,4 @@
+{
+	// The command to execute for the terminal, leave blank for the OS default
+	"terminal": ""
+}
