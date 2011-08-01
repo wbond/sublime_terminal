@@ -61,9 +61,13 @@ class TerminalCommand():
 
 class OpenTerminalCommand(sublime_plugin.WindowCommand, TerminalCommand):
 	def run(self, paths=[]):
-		path = paths[0] if paths else self.window.active_view().file_name()
-		if not path:
-			return
+		if paths:
+			path = paths[0]
+		elif self.window.active_view():
+			path = self.window.active_view().file_name()
+		else:
+			path = self.window.folders()[0]
+			
 		if os.path.isfile(path):
 			path = os.path.dirname(path)
 		self.run_terminal(path)
