@@ -27,10 +27,27 @@ class TerminalSelector():
             return TerminalSelector.default
         
         if os.name == 'nt':
-            powershell = os.environ['SYSTEMROOT'] + \
-                '\\System32\\WindowsPowerShell\\v1.0\\powershell.exe'
-            if os.path.exists(powershell):
-                default = powershell
+            if os.path.exists(os.environ['SYSTEMROOT'] +
+                    '\\System32\\WindowsPowerShell\\v1.0\\powershell.exe'):
+                # This mimics the default powershell colors since calling
+                # subprocess.POpen() ends up acting like launching powershell
+                # from cmd.exe. Normally the size and color are inherited
+                # from cmd.exe, but this creates a custom mapping, and then
+                # the LaunchPowerShell.bat file adjusts some other settings.
+                key_string = 'Console\\%SystemRoot%_system32_' + \
+                    'WindowsPowerShell_v1.0_powershell.exe'
+                try:
+                    key = _winreg.OpenKey(_winreg.HKEY_CURRENT_USER,
+                        key_string)
+                except (WindowsError):
+                    key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
+                        key_string)
+                    _winreg.SetValueEx(key, 'ColorTable05', 0,
+                        _winreg.REG_DWORD, 5645313)
+                    _winreg.SetValueEx(key, 'ColorTable06', 0,
+                        _winreg.REG_DWORD, 15789550)
+                package_dir = os.path.join(sublime.packages_path(), __name__)
+                default = os.path.join(package_dir, 'PS.bat')
             else :
                 default = os.environ['SYSTEMROOT'] + '\\System32\\cmd.exe'
         
