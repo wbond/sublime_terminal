@@ -22,10 +22,10 @@ class TerminalSelector():
 
         if settings.get('terminal'):
             return settings.get('terminal')
-        
+
         if TerminalSelector.default:
             return TerminalSelector.default
-        
+
         if os.name == 'nt':
             if os.path.exists(os.environ['SYSTEMROOT'] +
                     '\\System32\\WindowsPowerShell\\v1.0\\powershell.exe'):
@@ -50,12 +50,12 @@ class TerminalSelector():
                 default = os.path.join(package_dir, 'PS.bat')
             else :
                 default = os.environ['SYSTEMROOT'] + '\\System32\\cmd.exe'
-        
+
         elif sys.platform == 'darwin':
             default = os.path.join(sublime.packages_path(), __name__,
                 'Terminal.sh')
             os.chmod(default, 0755)
-        
+
         else:
             ps = 'ps -eo comm | grep -E "gnome-session|ksmserver|' + \
                 'xfce4-session" | grep -v grep'
@@ -69,10 +69,10 @@ class TerminalSelector():
                     default = 'konsole'
             if not default:
                 default = 'xterm'
-        
+
         TerminalSelector.default = default
         return default
-    
+
 
 class TerminalCommand():
     def run_terminal(self, dir):
@@ -97,7 +97,7 @@ class OpenTerminalCommand(sublime_plugin.WindowCommand, TerminalCommand):
             path = self.window.active_view().file_name()
         else:
             path = self.window.folders()[0]
-            
+
         if os.path.isfile(path):
             path = os.path.dirname(path)
         self.run_terminal(path)
@@ -111,7 +111,7 @@ class OpenTerminalProjectFolderCommand(sublime_plugin.WindowCommand,
             folders = [x for x in self.window.folders() if path.find(x) == 0]
             if folders:
                 path = folders[0]
-        
+
         command = OpenTerminalCommand(self.window)
         command.run([path])
 
