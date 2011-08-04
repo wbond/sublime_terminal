@@ -1,42 +1,80 @@
 [
     {
         "caption": "Preferences",
-        "mnemonic": "r",
+        "mnemonic": "n",
         "id": "preferences",
         "children":
         [
             {
-                "caption": "Package Settings",
+                "caption": "Plugin Settings",
                 "mnemonic": "P",
-                "id": "package-settings",
+                "id": "plugin-settings",
                 "children":
                 [
-                    { "command": "open_file", "args": {"file": "${packages}/Terminal/Terminal.sublime-settings"}, "caption": "Terminal Settings" },
                     {
-                        "command": "open_file", "args":
-                        {
-                            "file": "${packages}/Terminal/Default (Windows).sublime-keymap",
-                            "platform": "Windows"
-                        },
-                        "caption": "Terminal Key Bindings"
-                    },
-                    {
-                        "command": "open_file", "args":
-                        {
-                            "file": "${packages}/Terminal/Default (OSX).sublime-keymap",
-                            "platform": "OSX"
-                        },
-                        "caption": "Terminal Key Bindings"
-                    },
-                    {
-                        "command": "open_file", "args":
-                        {
-                            "file": "${packages}/Terminal/Default (Linux).sublime-keymap",
-                            "platform": "Linux"
-                        },
-                        "caption": "Terminal Key Bindings"
-                    },
-                    { "caption": "-" }
+                        "caption": "Terminal",
+                        "children":
+                        [
+                            {
+                                "command": "open_file", 
+                                "args": {"file": "${packages}/Terminal/Terminal.sublime-settings"},
+                                "caption": "Settings – Default"
+                            },{
+                                "command": "open_file", 
+                                "args": {"file": "${packages}/User/Terminal.sublime-settings"},
+                                "caption": "Settings – User"
+                            },
+                            {
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/Terminal/Default (Windows).sublime-keymap",
+                                    "platform": "Windows"
+                                },
+                                "caption": "Key Bindings – Default"
+                            },
+                            {
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/Terminal/Default (OSX).sublime-keymap",
+                                    "platform": "OSX"
+                                },
+                                "caption": "Key Bindings – Default"
+                            },
+                            {
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/Terminal/Default (Linux).sublime-keymap",
+                                    "platform": "Linux"
+                                },
+                                "caption": "Key Bindings – Default"
+                            },
+                            {
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/User/Default (Windows).sublime-keymap",
+                                    "platform": "Windows"
+                                },
+                                "caption": "Key Bindings – User"
+                            },
+                            {
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/User/Default (OSX).sublime-keymap",
+                                    "platform": "OSX"
+                                },
+                                "caption": "Key Bindings – User"
+                            },
+                            {
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/User/Default (Linux).sublime-keymap",
+                                    "platform": "Linux"
+                                },
+                                "caption": "Key Bindings – User"
+                            },
+                            { "caption": "-" }
+                        ]
+                    }
                 ]
             }
         ]
