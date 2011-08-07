@@ -6,9 +6,9 @@
         "children":
         [
             {
-                "caption": "Plugin Settings",
+                "caption": "Package Settings",
                 "mnemonic": "P",
-                "id": "plugin-settings",
+                "id": "package-settings",
                 "children":
                 [
                     {
