@@ -64,7 +64,7 @@ class TerminalSelector():
                 if wm[0] == 'gnome-session':
                     default = 'gnome-terminal'
                 elif wm[0] == 'xfce4-session':
-                    default = 'xfce4-terminal'
+                    default = 'terminal'
                 elif wm[0] == 'ksmserver':
                     default = 'konsole'
             if not default:
