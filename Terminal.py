@@ -3,7 +3,6 @@ import sublime_plugin
 import os
 import sys
 import subprocess
-import stat
 
 if os.name == 'nt':
     import _winreg
@@ -100,6 +99,7 @@ class OpenTerminalCommand(sublime_plugin.WindowCommand, TerminalCommand):
 
         if os.path.isfile(path):
             path = os.path.dirname(path)
+
         self.run_terminal(path)
 
 
