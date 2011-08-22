@@ -74,53 +74,58 @@ class TerminalSelector():
 
 
 class TerminalCommand():
-    def run_terminal(self, dir):
+    def run_terminal(self, dir, parameters):
         try:
             if not dir:
                 raise NotFoundError('The file open in the selected view has ' +
                     'not yet been saved')
-            ForkGui(TerminalSelector.get(), dir)
+            args = [TerminalSelector.get()]
+            args.extend(parameters)
+            proc = subprocess.Popen(args, stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=dir)
+
         except (OSError) as (exception):
             print str(exception)
-            sublime.error_message('Terminal: The terminal ' +
+            sublime.error_message(__name__ + ': The terminal ' +
                 TerminalSelector.get() + ' was not found')
         except (Exception) as (exception):
-            sublime.error_message('Terminal: ' + str(exception))
+            sublime.error_message(__name__ + ': ' + str(exception))
 
 
 class OpenTerminalCommand(sublime_plugin.WindowCommand, TerminalCommand):
-    def run(self, paths=[]):
+    def run(self, paths=[], parameters=None):
         if paths:
             path = paths[0]
         elif self.window.active_view():
             path = self.window.active_view().file_name()
-        else:
+        elif self.window.folders():
             path = self.window.folders()[0]
+        else:
+            sublime.error_message(__name__ + ': No place to open terminal to')
+            return
+
+        if parameters == None:
+            settings = sublime.load_settings('Terminal.sublime-settings')
+            parameters = settings.get('parameters')
+
+        if not parameters:
+            parameters = []
 
         if os.path.isfile(path):
             path = os.path.dirname(path)
 
-        self.run_terminal(path)
+        self.run_terminal(path, parameters)
 
 
 class OpenTerminalProjectFolderCommand(sublime_plugin.WindowCommand,
         TerminalCommand):
-    def run(self, paths=[]):
+    def run(self, paths=[], parameters=None):
         path = paths[0] if paths else self.window.active_view().file_name()
+        passed_paths = []
         if path:
             folders = [x for x in self.window.folders() if path.find(x) == 0]
             if folders:
-                path = folders[0]
+                passed_paths = [folders[0]]
 
         command = OpenTerminalCommand(self.window)
-        command.run([path])
-
-
-class ForkGui():
-    def __init__(self, *args):
-        self.args = args
-        self.run()
-
-    def run(self):
-        proc = subprocess.Popen(self.args[0], stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=self.args[1])
+        command.run(passed_paths, parameters=parameters)
