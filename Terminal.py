@@ -81,8 +81,7 @@ class TerminalCommand():
                     'not yet been saved')
             args = [TerminalSelector.get()]
             args.extend(parameters)
-            proc = subprocess.Popen(args, stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=dir)
+            proc = subprocess.Popen(args, cwd=dir)
 
         except (OSError) as (exception):
             print str(exception)
