@@ -18,9 +18,18 @@ class TerminalSelector():
     @staticmethod
     def get():
         settings = sublime.load_settings('Terminal.sublime-settings')
+        package_dir = os.path.join(sublime.packages_path(), __name__)
 
-        if settings.get('terminal'):
-            return settings.get('terminal')
+        terminal = settings.get('terminal')
+        if terminal:
+            dir, executable = os.path.split(terminal)
+            if not dir:
+                joined_terminal = os.path.join(package_dir, executable)
+                if os.path.exists(joined_terminal):
+                    terminal = joined_terminal
+                    if not os.access(terminal, os.X_OK):
+                        os.chmod(terminal, 0755)
+            return terminal
 
         if TerminalSelector.default:
             return TerminalSelector.default
@@ -45,15 +54,14 @@ class TerminalSelector():
                         _winreg.REG_DWORD, 5645313)
                     _winreg.SetValueEx(key, 'ColorTable06', 0,
                         _winreg.REG_DWORD, 15789550)
-                package_dir = os.path.join(sublime.packages_path(), __name__)
                 default = os.path.join(package_dir, 'PS.bat')
             else :
                 default = os.environ['SYSTEMROOT'] + '\\System32\\cmd.exe'
 
         elif sys.platform == 'darwin':
-            default = os.path.join(sublime.packages_path(), __name__,
-                'Terminal.sh')
-            os.chmod(default, 0755)
+            default = os.path.join(package_dir, 'Terminal.sh')
+            if not os.access(default, os.X_OK):
+                os.chmod(default, 0755)
 
         else:
             ps = 'ps -eo comm | grep -E "gnome-session|ksmserver|' + \
@@ -74,6 +82,17 @@ class TerminalSelector():
 
 
 class TerminalCommand():
+    def get_path(self, paths):
+        if paths:
+            return paths[0]
+        elif self.window.active_view():
+            return self.window.active_view().file_name()
+        elif self.window.folders():
+            return self.window.folders()[0]
+        else:
+            sublime.error_message(__name__ + ': No place to open terminal to')
+            return False
+
     def run_terminal(self, dir, parameters):
         try:
             if not dir:
@@ -81,7 +100,7 @@ class TerminalCommand():
                     'not yet been saved')
             args = [TerminalSelector.get()]
             args.extend(parameters)
-            proc = subprocess.Popen(args, cwd=dir)
+            subprocess.Popen(args, cwd=dir)
 
         except (OSError) as (exception):
             print str(exception)
@@ -93,14 +112,8 @@ class TerminalCommand():
 
 class OpenTerminalCommand(sublime_plugin.WindowCommand, TerminalCommand):
     def run(self, paths=[], parameters=None):
-        if paths:
-            path = paths[0]
-        elif self.window.active_view():
-            path = self.window.active_view().file_name()
-        elif self.window.folders():
-            path = self.window.folders()[0]
-        else:
-            sublime.error_message(__name__ + ': No place to open terminal to')
+        path = self.get_path(paths)
+        if not path:
             return
 
         if parameters == None:
@@ -119,12 +132,11 @@ class OpenTerminalCommand(sublime_plugin.WindowCommand, TerminalCommand):
 class OpenTerminalProjectFolderCommand(sublime_plugin.WindowCommand,
         TerminalCommand):
     def run(self, paths=[], parameters=None):
-        path = paths[0] if paths else self.window.active_view().file_name()
-        passed_paths = []
-        if path:
-            folders = [x for x in self.window.folders() if path.find(x) == 0]
-            if folders:
-                passed_paths = [folders[0]]
+        path = self.get_path(paths)
+        if not path:
+            return
+
+        folders = [x for x in self.window.folders() if path.find(x) == 0][0:1]
 
         command = OpenTerminalCommand(self.window)
-        command.run(passed_paths, parameters=parameters)
+        command.run(folders, parameters=parameters)
