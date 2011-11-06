@@ -99,7 +99,7 @@ class TerminalCommand():
                 raise NotFoundError('The file open in the selected view has ' +
                     'not yet been saved')
             for k, v in enumerate(parameters):
-                parameters[k] = v.replace('%SB2_DIR%', dir)
+                parameters[k] = v.replace('%CWD%', dir)
             args = [TerminalSelector.get()]
             args.extend(parameters)
             subprocess.Popen(args, cwd=dir)
