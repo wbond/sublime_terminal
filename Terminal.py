@@ -17,6 +17,7 @@ class TerminalSelector():
 
     @staticmethod
     def get():
+        global default
         settings = sublime.load_settings('Terminal.sublime-settings')
         package_dir = os.path.join(sublime.packages_path(), __name__)
 
