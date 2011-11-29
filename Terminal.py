@@ -34,6 +34,8 @@ class TerminalSelector():
         if TerminalSelector.default:
             return TerminalSelector.default
 
+        default = None
+
         if os.name == 'nt':
             if os.path.exists(os.environ['SYSTEMROOT'] +
                     '\\System32\\WindowsPowerShell\\v1.0\\powershell.exe'):
