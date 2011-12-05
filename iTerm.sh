@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# set to true to open new sessions in a tab instead of window
+USE_NEW_TAB=false
+
 CD_CMD="cd "\\\"$(pwd)\\\"" && clear"
 VERSION=$(sw_vers -productVersion)
 
@@ -18,7 +21,11 @@ if (( $RUNNING )); then
 	osascript<<END
 	tell application "iTerm"
 		activate
-		set term to (make new terminal)
+		if $USE_NEW_TAB and (current terminal exists) then
+			set term to current terminal
+		else
+			set term to (make new terminal)
+		end if
 		tell term
 			set sess to (launch session "Default Session")
 			tell sess
