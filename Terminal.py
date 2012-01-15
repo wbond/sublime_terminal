@@ -67,7 +67,7 @@ class TerminalSelector():
                 os.chmod(default, 0755)
 
         else:
-            ps = 'ps -eo comm | grep -E "gnome-session|ksmserver|' + \
+            ps = 'ps -eo comm | grep -E "gnome-session|ksmserver|lxsession|' + \
                 'xfce4-session" | grep -v grep'
             wm = [x.replace("\n", '') for x in os.popen(ps)]
             if wm:
@@ -77,6 +77,8 @@ class TerminalSelector():
                     default = 'terminal'
                 elif wm[0] == 'ksmserver':
                     default = 'konsole'
+                elif wm[0] == 'lxsession':
+                    default = 'lxterminal'
             if not default:
                 default = 'xterm'
 
