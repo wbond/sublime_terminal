@@ -105,7 +105,7 @@ class TerminalCommand():
                 parameters[k] = v.replace('%CWD%', dir)
             args = [TerminalSelector.get()]
             args.extend(parameters)
-            encoding = locale.getpreferredencoding(do_setlocale=True)
+            encoding = locale.getfilesystemencoding()
             subprocess.Popen(args, cwd=dir.encode(encoding))
 
         except (OSError) as (exception):
