@@ -13,7 +13,7 @@ class NotFoundError(Exception):
     pass
 
 def get_platform_setting(settings, key):
-    value = settings.get('%s_%s' % (key, sys.platform))
+    value = settings.get('%s_%s' % (key, sublime.platform()))
     if not value:
         value = settings.get(key)
     return value
