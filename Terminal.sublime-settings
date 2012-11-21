@@ -8,4 +8,15 @@
 	// dict when calling the "open_terminal" or "open_terminal_project_folder"
 	// commands
 	"parameters": []
+
+    // You can also supply platform-specific terminal commands and parameters
+    // by suffixing the setting name with the relevant platform name, like so:
+    // "terminal_windows": "",
+    // "parameters_windows": "",
+    // "terminal_linux": "",
+    // "parameters_linux": "",
+    // "terminal_osx": "",
+    // "parameters_osx": ""
+    // for Windows, Linux and OS X, respectively. If a platform-specific setting
+    // is found, it takes precedence over the platform-independent setting.
 }

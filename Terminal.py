@@ -12,6 +12,11 @@ if os.name == 'nt':
 class NotFoundError(Exception):
     pass
 
+def get_platform_setting(settings, key):
+    value = settings.get('%s_%s' % (key, sublime.platform()))
+    if not value:
+        value = settings.get(key)
+    return value
 
 class TerminalSelector():
     default = None
@@ -21,7 +26,7 @@ class TerminalSelector():
         settings = sublime.load_settings('Terminal.sublime-settings')
         package_dir = os.path.join(sublime.packages_path(), __name__)
 
-        terminal = settings.get('terminal')
+        terminal = get_platform_setting(settings, 'terminal')
         if terminal:
             dir, executable = os.path.split(terminal)
             if not dir:
@@ -124,7 +129,7 @@ class OpenTerminalCommand(sublime_plugin.WindowCommand, TerminalCommand):
 
         if parameters == None:
             settings = sublime.load_settings('Terminal.sublime-settings')
-            parameters = settings.get('parameters')
+            parameters = get_platform_setting(settings, 'parameters')
 
         if not parameters:
             parameters = []
