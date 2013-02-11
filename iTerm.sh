@@ -5,7 +5,7 @@ VERSION=$(sw_vers -productVersion)
 if (( $(expr $VERSION '<' 10.7) || $(expr $VERSION '>=' 10.8) )); then
 	RUNNING=$(ps -eo pid,comm -U $UID  | grep iTerm.app | grep -v grep | wc -l)
 else
-    RUNNING=1
+	RUNNING=1
 fi
 
 if (( $RUNNING )); then
