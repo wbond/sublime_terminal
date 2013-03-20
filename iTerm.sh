@@ -1,17 +1,20 @@
 #!/bin/bash
 
 CD_CMD="cd "\\\"$(pwd)\\\"" && clear"
-VERSION=$(sw_vers -productVersion)
-if (( $(expr $VERSION '<' 10.7) || $(expr $VERSION '>=' 10.8) )); then
-	RUNNING=$(ps -eo pid,comm -U $UID  | grep iTerm.app | grep -v grep | wc -l)
-else
-	RUNNING=1
-fi
+# This:
+# > tell application "System Events" to set iTermIsRunning to exists (processes where bundle identifier is "com.googlecode.iterm2")
+# does not currently work properly, since it will always report iTerm as running. Not intended, since
+# running first osascript snippet when no iTerm is actually running results in extra tab being opened.
+RUNNING=$(ps -eo pid,comm -U $UID  | grep iTerm.app | wc -l)
 
 if (( $RUNNING )); then
 	osascript<<END
 	tell application "iTerm"
-		set term to (make new terminal)
+		try
+			set term to last terminal
+		on error
+			set term to (make new terminal)
+		end try
 		tell term
 			set sess to (launch session "Default Session")
 			tell sess
