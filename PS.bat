@@ -1,1 +1,1 @@
-start powershell -noexit -ExecutionPolicy RemoteSigned "%APPDATA%\Sublime` Text` 2\Packages\Terminal\PS.ps1"
+start powershell -noexit -ExecutionPolicy RemoteSigned "%sublime%\Data\Packages\Terminal\PS.ps1"
