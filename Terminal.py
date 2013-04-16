@@ -58,6 +58,7 @@ class TerminalSelector():
                     _winreg.SetValueEx(key, 'ColorTable06', 0,
                         _winreg.REG_DWORD, 15789550)
                 default = os.path.join(package_dir, 'PS.bat')
+                os.putenv('sublime', os.getcwd().replace(' ', '` '))
             else :
                 default = os.environ['SYSTEMROOT'] + '\\System32\\cmd.exe'
 
@@ -103,9 +104,12 @@ class TerminalCommand():
                     'not yet been saved')
             for k, v in enumerate(parameters):
                 parameters[k] = v.replace('%CWD%', dir)
-            args = [TerminalSelector.get()]
-            args.extend(parameters)
+            fs_encoding=sys.getfilesystemencoding()
+            args = [TerminalSelector.get().encode(fs_encoding)]
             encoding = locale.getpreferredencoding(do_setlocale=True)
+            for i,parameters in enumerate(parameters):
+                parameters[i]=parameters[i].encode(encoding)
+            args.extend(parameters)
             subprocess.Popen(args, cwd=dir.encode(encoding))
 
         except (OSError) as (exception):
