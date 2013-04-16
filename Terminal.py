@@ -58,6 +58,7 @@ class TerminalSelector():
                     _winreg.SetValueEx(key, 'ColorTable06', 0,
                         _winreg.REG_DWORD, 15789550)
                 default = os.path.join(package_dir, 'PS.bat')
+                os.putenv('sublime', os.getcwd().replace(' ', '` '))
             else :
                 default = os.environ['SYSTEMROOT'] + '\\System32\\cmd.exe'
 
