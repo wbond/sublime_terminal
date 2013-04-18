@@ -68,7 +68,7 @@ class TerminalSelector():
 
         else:
             ps = 'ps -eo comm | grep -E "gnome-session|ksmserver|' + \
-                'xfce4-session" | grep -v grep'
+                'xfce4-session|mate-panel" | grep -v grep'
             wm = [x.replace("\n", '') for x in os.popen(ps)]
             if wm:
                 if wm[0] == 'gnome-session':
@@ -77,6 +77,8 @@ class TerminalSelector():
                     default = 'terminal'
                 elif wm[0] == 'ksmserver':
                     default = 'konsole'
+                elif wm[0] == 'mate-panel':
+                    default = 'mate-terminal'
             if not default:
                 default = 'xterm'
 
