@@ -3,7 +3,7 @@ import sublime_plugin
 import os
 import sys
 import subprocess
-import locale
+import stat
 
 if os.name == 'nt':
     import _winreg
@@ -19,7 +19,7 @@ class TerminalSelector():
     @staticmethod
     def get():
         settings = sublime.load_settings('Terminal.sublime-settings')
-        package_dir = os.path.join(sublime.packages_path(), __name__)
+        package_dir = os.path.join(sublime.packages_path(), __name__.split('.')[0])
 
         terminal = settings.get('terminal')
         if terminal:
@@ -29,7 +29,7 @@ class TerminalSelector():
                 if os.path.exists(joined_terminal):
                     terminal = joined_terminal
                     if not os.access(terminal, os.X_OK):
-                        os.chmod(terminal, 0755)
+                        os.chmod(terminal, stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
             return terminal
 
         if TerminalSelector.default:
@@ -64,7 +64,7 @@ class TerminalSelector():
         elif sys.platform == 'darwin':
             default = os.path.join(package_dir, 'Terminal.sh')
             if not os.access(default, os.X_OK):
-                os.chmod(default, 0755)
+                os.chmod(default, stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
 
         else:
             ps = 'ps -eo comm | grep -E "gnome-session|ksmserver|' + \
@@ -105,15 +105,14 @@ class TerminalCommand():
                 parameters[k] = v.replace('%CWD%', dir)
             args = [TerminalSelector.get()]
             args.extend(parameters)
-            encoding = locale.getpreferredencoding(do_setlocale=True)
-            subprocess.Popen(args, cwd=dir.encode(encoding))
+            subprocess.Popen(args, cwd=dir)
 
-        except (OSError) as (exception):
-            print str(exception)
+        except OSError as exception:
+            print(exception)
             sublime.error_message(__name__ + ': The terminal ' +
                 TerminalSelector.get() + ' was not found')
-        except (Exception) as (exception):
-            sublime.error_message(__name__ + ': ' + str(exception))
+        except Exception as exception:
+            sublime.error_message(__name__ + ': ' + exception)
 
 
 class OpenTerminalCommand(sublime_plugin.WindowCommand, TerminalCommand):
