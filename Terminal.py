@@ -3,7 +3,6 @@ import sublime_plugin
 import os
 import sys
 import subprocess
-import locale
 import stat
 
 if os.name == 'nt':
@@ -106,8 +105,7 @@ class TerminalCommand():
                 parameters[k] = v.replace('%CWD%', dir)
             args = [TerminalSelector.get()]
             args.extend(parameters)
-            encoding = locale.getpreferredencoding(do_setlocale=True)
-            subprocess.Popen(args, cwd=dir.encode(encoding))
+            subprocess.Popen(args, cwd=dir)
 
         except OSError as exception:
             print(exception)
