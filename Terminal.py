@@ -6,7 +6,10 @@ import subprocess
 import locale
 
 if os.name == 'nt':
-    import _winreg
+    try:
+        import _winreg
+    except:
+        import winreg as _winreg
 
 
 class NotFoundError(Exception):
@@ -29,7 +32,7 @@ class TerminalSelector():
                 if os.path.exists(joined_terminal):
                     terminal = joined_terminal
                     if not os.access(terminal, os.X_OK):
-                        os.chmod(terminal, 0755)
+                        os.chmod(terminal, int('755', 8))
             return terminal
 
         if TerminalSelector.default:
@@ -64,7 +67,7 @@ class TerminalSelector():
         elif sys.platform == 'darwin':
             default = os.path.join(package_dir, 'Terminal.sh')
             if not os.access(default, os.X_OK):
-                os.chmod(default, 0755)
+                os.chmod(default, int('755', 8))
 
         else:
             ps = 'ps -eo comm | grep -E "gnome-session|ksmserver|' + \
@@ -108,11 +111,11 @@ class TerminalCommand():
             encoding = locale.getpreferredencoding(do_setlocale=True)
             subprocess.Popen(args, cwd=dir.encode(encoding))
 
-        except (OSError) as (exception):
-            print str(exception)
+        except (OSError) as exception:
+            print(str(exception))
             sublime.error_message(__name__ + ': The terminal ' +
                 TerminalSelector.get() + ' was not found')
-        except (Exception) as (exception):
+        except (Exception) as exception:
             sublime.error_message(__name__ + ': ' + str(exception))
 
 
