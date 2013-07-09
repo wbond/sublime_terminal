@@ -19,9 +19,11 @@ class TerminalSelector():
     @staticmethod
     def get():
         settings = sublime.load_settings('Terminal.sublime-settings')
-        package_dir = os.path.join(sublime.packages_path(), __name__)
+        name = __name__.split('.')[0]
+        package_dir = os.path.join(sublime.packages_path(), name)
 
         terminal = settings.get('terminal')
+
         if terminal:
             dir, executable = os.path.split(terminal)
             if not dir:
@@ -29,7 +31,7 @@ class TerminalSelector():
                 if os.path.exists(joined_terminal):
                     terminal = joined_terminal
                     if not os.access(terminal, os.X_OK):
-                        os.chmod(terminal, 0755)
+                        os.chmod(terminal, 0o755)
             return terminal
 
         if TerminalSelector.default:
@@ -39,7 +41,7 @@ class TerminalSelector():
 
         if os.name == 'nt':
             if os.path.exists(os.environ['SYSTEMROOT'] +
-                    '\\System32\\WindowsPowerShell\\v1.0\\powershell.exe'):
+                              '\\System32\\WindowsPowerShell\\v1.0\\powershell.exe'):
                 # This mimics the default powershell colors since calling
                 # subprocess.POpen() ends up acting like launching powershell
                 # from cmd.exe. Normally the size and color are inherited
@@ -49,22 +51,22 @@ class TerminalSelector():
                     'WindowsPowerShell_v1.0_powershell.exe'
                 try:
                     key = _winreg.OpenKey(_winreg.HKEY_CURRENT_USER,
-                        key_string)
+                                          key_string)
                 except (WindowsError):
                     key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
-                        key_string)
+                                            key_string)
                     _winreg.SetValueEx(key, 'ColorTable05', 0,
-                        _winreg.REG_DWORD, 5645313)
+                                       _winreg.REG_DWORD, 5645313)
                     _winreg.SetValueEx(key, 'ColorTable06', 0,
-                        _winreg.REG_DWORD, 15789550)
+                                       _winreg.REG_DWORD, 15789550)
                 default = os.path.join(package_dir, 'PS.bat')
-            else :
+            else:
                 default = os.environ['SYSTEMROOT'] + '\\System32\\cmd.exe'
 
         elif sys.platform == 'darwin':
             default = os.path.join(package_dir, 'Terminal.sh')
             if not os.access(default, os.X_OK):
-                os.chmod(default, 0755)
+                os.chmod(default, 0o755)
 
         else:
             ps = 'ps -eo comm | grep -E "gnome-session|ksmserver|' + \
@@ -100,7 +102,7 @@ class TerminalCommand():
         try:
             if not dir:
                 raise NotFoundError('The file open in the selected view has ' +
-                    'not yet been saved')
+                                    'not yet been saved')
             for k, v in enumerate(parameters):
                 parameters[k] = v.replace('%CWD%', dir)
             args = [TerminalSelector.get()]
@@ -108,11 +110,11 @@ class TerminalCommand():
             encoding = locale.getpreferredencoding(do_setlocale=True)
             subprocess.Popen(args, cwd=dir.encode(encoding))
 
-        except (OSError) as (exception):
-            print str(exception)
+        except OSError as exception:
+            print(str(exception))
             sublime.error_message(__name__ + ': The terminal ' +
-                TerminalSelector.get() + ' was not found')
-        except (Exception) as (exception):
+                                  TerminalSelector.get() + ' was not found')
+        except Exception as exception:
             sublime.error_message(__name__ + ': ' + str(exception))
 
 
@@ -122,7 +124,7 @@ class OpenTerminalCommand(sublime_plugin.WindowCommand, TerminalCommand):
         if not path:
             return
 
-        if parameters == None:
+        if parameters is None:
             settings = sublime.load_settings('Terminal.sublime-settings')
             parameters = settings.get('parameters')
 
@@ -135,8 +137,7 @@ class OpenTerminalCommand(sublime_plugin.WindowCommand, TerminalCommand):
         self.run_terminal(path, parameters)
 
 
-class OpenTerminalProjectFolderCommand(sublime_plugin.WindowCommand,
-        TerminalCommand):
+class OpenTerminalProjectFolderCommand(sublime_plugin.WindowCommand, TerminalCommand):
     def run(self, paths=[], parameters=None):
         path = self.get_path(paths)
         if not path:
