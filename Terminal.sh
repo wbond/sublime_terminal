@@ -1,10 +1,8 @@
 #!/bin/bash
 
-CD_CMD="cd "\\\"$(pwd)\\\"" && clear"
-VERSION=$(sw_vers -productVersion)
-if (( $(expr $VERSION '<' 10.7.0) )); then
-	IN_WINDOW="in window 1"
-fi
+CD_CMD="cd "\\\"$(pwd)\\\"""
+IN_WINDOW="in window 1"
+
 osascript<<END
 try
 	tell application "System Events"
@@ -12,11 +10,12 @@ try
 			tell application "Terminal"
 				activate
 				do script "$CD_CMD" $IN_WINDOW
+				tell application "System Events" to set frontmost of process "Terminal" to true
 			end tell
 		else
 			tell application "Terminal"
 				activate
-				do script "$CD_CMD"
+				do script "$CD_CMD" $IN_WINDOW
 			end tell
 		end if
 	end tell
