@@ -6,7 +6,10 @@ import subprocess
 import locale
 
 if os.name == 'nt':
-    import _winreg
+    try:
+        import _winreg
+    except (ImportError):
+        import winreg as _winreg
 
 
 class NotFoundError(Exception):
