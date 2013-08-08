@@ -29,7 +29,7 @@ class TerminalSelector():
                 if os.path.exists(joined_terminal):
                     terminal = joined_terminal
                     if not os.access(terminal, os.X_OK):
-                        os.chmod(terminal, 0755)
+                        os.chmod(terminal, 0o755)
             return terminal
 
         if TerminalSelector.default:
@@ -64,7 +64,7 @@ class TerminalSelector():
         elif sys.platform == 'darwin':
             default = os.path.join(package_dir, 'Terminal.sh')
             if not os.access(default, os.X_OK):
-                os.chmod(default, 0755)
+                os.chmod(default, 0o755)
 
         else:
             ps = 'ps -eo comm | grep -E "gnome-session|ksmserver|' + \
@@ -96,23 +96,23 @@ class TerminalCommand():
             sublime.error_message(__name__ + ': No place to open terminal to')
             return False
 
-    def run_terminal(self, dir, parameters):
+    def run_terminal(self, dir_, parameters):
         try:
-            if not dir:
+            if not dir_:
                 raise NotFoundError('The file open in the selected view has ' +
                     'not yet been saved')
             for k, v in enumerate(parameters):
-                parameters[k] = v.replace('%CWD%', dir)
+                parameters[k] = v.replace('%CWD%', dir_)
             args = [TerminalSelector.get()]
             args.extend(parameters)
             encoding = locale.getpreferredencoding(do_setlocale=True)
-            subprocess.Popen(args, cwd=dir.encode(encoding))
+            subprocess.Popen(args, cwd=dir_.encode(encoding))
 
-        except (OSError) as (exception):
-            print str(exception)
+        except (OSError) as exception:
+            print(str(exception))
             sublime.error_message(__name__ + ': The terminal ' +
                 TerminalSelector.get() + ' was not found')
-        except (Exception) as (exception):
+        except (Exception) as exception:
             sublime.error_message(__name__ + ': ' + str(exception))
 
 
