@@ -104,9 +104,12 @@ class TerminalCommand():
     def get_path(self, paths):
         if paths:
             return paths[0]
-        elif self.window.active_view():
-            return self.window.active_view().file_name()
-        elif self.window.folders():
+        view = self.window.active_view()
+        if view is not None:
+            file_name = self.window.active_view().file_name()
+            if file_name is not None:
+                return file_name
+        if self.window.folders():
             return self.window.folders()[0]
         else:
             sublime.error_message('Terminal: No place to open terminal to')
