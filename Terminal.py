@@ -113,12 +113,20 @@ class TerminalCommand():
             return False
 
     def run_terminal(self, dir_, parameters):
+        view = self.window.active_view()
+        replaces = {
+            '%CWD%': dir_,
+            '%FILE%': self.window.active_view().file_name(),
+            '%LINE%': str(view.rowcol(view.sel()[0].begin())[0] + 1)
+        }
         try:
             if not dir_:
                 raise NotFoundError('The file open in the selected view has ' +
                     'not yet been saved')
             for k, v in enumerate(parameters):
-                parameters[k] = v.replace('%CWD%', dir_)
+                for old, new in replaces.items():
+                    v = v.replace(old, new)
+                parameters[k] = v
             args = [TerminalSelector.get()]
             args.extend(parameters)
             encoding = locale.getpreferredencoding(do_setlocale=True)
