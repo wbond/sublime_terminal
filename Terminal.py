@@ -104,7 +104,7 @@ class TerminalCommand():
     def get_path(self, paths):
         if paths:
             for path in paths:
-                if path in self.window.active_view().file_name():
+                if os.path.expanduser(path) in self.window.active_view().file_name():
                     return path
             return paths[0]
         elif self.window.active_view():
@@ -133,6 +133,7 @@ class TerminalCommand():
             args = [TerminalSelector.get()]
             args.extend(parameters)
             encoding = locale.getpreferredencoding(do_setlocale=True)
+            dir_ = os.path.expanduser(dir_)
             if sys.version_info >= (3,):
                 cwd = dir_
             else:
