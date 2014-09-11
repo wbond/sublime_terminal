@@ -103,6 +103,9 @@ class TerminalSelector():
 class TerminalCommand():
     def get_path(self, paths):
         if paths:
+            for path in paths:
+                if path in self.window.active_view().file_name():
+                    return path
             return paths[0]
         elif self.window.active_view():
             return self.window.active_view().file_name()
