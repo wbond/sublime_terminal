@@ -14,13 +14,13 @@ else
 	RUNNING=1
 fi
 
-if (( $RUNNING )); then
+if (( ! $RUNNING )); then
 	osascript<<END
 	tell application "iTerm"
 		activate
-		set term to (make new terminal)
+		set term to current terminal
 		tell term
-			set sess to (launch session "Default Session")
+			set sess to current session
 			tell sess
 				write text "$CD_CMD"
 			end tell
@@ -31,9 +31,13 @@ else
 	osascript<<END
 	tell application "iTerm"
 		activate
-		set sess to the first session of the first terminal
-		tell sess
-			write text "$CD_CMD"
+		set term to the first terminal
+		tell term
+			launch session "Default Session"
+			set sess to current session
+			tell sess
+				write text "$CD_CMD"
+			end tell
 		end tell
 	end tell
 END
