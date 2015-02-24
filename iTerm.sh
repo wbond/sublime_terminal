@@ -1,39 +1,40 @@
 #!/bin/bash
 
 CD_CMD="cd "\\\"$(pwd)\\\"" && clear"
-NEWWINDOW=0
+VERSION=$(sw_vers -productVersion)
 
-while [ "$1" != "" ]; do
-	case $1 in
-		--openNewWindow )   NEWWINDOW=1
-												;;
-		--openNewTab )      NEWWINDOW=0
-												;;
-	esac
-	shift
-done
+if (( $(expr $VERSION '<' 10.7) )); then
+	RUNNING=$(osascript<<END
+	tell application "System Events"
+	    count(processes whose name is "iTerm")
+	end tell
+END
+)
+else
+	RUNNING=1
+fi
 
-if (( $NEWWINDOW )); then
-	osascript &>/dev/null <<EOF
+if (( $RUNNING )); then
+	osascript<<END
 	tell application "iTerm"
+		activate
 		set term to (make new terminal)
 		tell term
-			launch session "Default Session"
-			tell the last session
+			set sess to (launch session "Default Session")
+			tell sess
 				write text "$CD_CMD"
 			end tell
 		end tell
 	end tell
-EOF
+END
 else
-	osascript &>/dev/null <<EOF
+	osascript<<END
 	tell application "iTerm"
-		tell current terminal
-			launch session "Default Session"
-			tell the last session
-				write text "$CD_CMD"
-			end tell
+		activate
+		set sess to the first session of the first terminal
+		tell sess
+			write text "$CD_CMD"
 		end tell
 	end tell
-EOF
+END
 fi
