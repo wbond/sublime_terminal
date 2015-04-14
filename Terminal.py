@@ -21,16 +21,26 @@ if sys.version_info >= (3,):
 else:
     installed_dir = os.path.basename(os.getcwd())
 
+class TerminalSettings():
+    @staticmethod
+    def get(key, default = None):
+        settings = sublime.load_settings('Terminal.sublime-settings')
+        os_specific_settings = {};
+        if os.name == 'nt':
+            os_specific_settings = sublime.load_settings('Terminal (Windows).sublime-settings')
+        elif os.name == 'darwin':
+            os_specific_settings = sublime.load_settings('Terminal (OSX).sublime-settings')
+        else:
+            os_specific_settings = sublime.load_settings('Terminal (Linux).sublime-settings')
+        return os_specific_settings.get(key, settings.get(key, default))
 
 class TerminalSelector():
     default = None
 
     @staticmethod
     def get():
-        settings = sublime.load_settings('Terminal.sublime-settings')
         package_dir = os.path.join(sublime.packages_path(), installed_dir)
-
-        terminal = settings.get('terminal')
+        terminal = TerminalSettings.get('terminal')
         if terminal:
             dir, executable = os.path.split(terminal)
             if not dir:
@@ -146,12 +156,7 @@ class OpenTerminalCommand(sublime_plugin.WindowCommand, TerminalCommand):
         if not path:
             return
 
-        if parameters == None:
-            settings = sublime.load_settings('Terminal.sublime-settings')
-            parameters = settings.get('parameters')
-
-        if not parameters:
-            parameters = []
+        parameters = TerminalSettings.get('parameters', [])
 
         if os.path.isfile(path):
             path = os.path.dirname(path)
