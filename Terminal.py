@@ -85,7 +85,9 @@ class TerminalSelector():
         else:
             ps = 'ps -eo comm | grep -E "gnome-session|ksmserver|' + \
                 'xfce4-session" | grep -v grep'
-            wm = [x.replace("\n", '') for x in os.popen(ps)]
+            subprocess.call(ps)
+            wm = [x.replace("\n", '') for x in subprocess.call(ps)]
+            
             if wm:
                 if wm[0] == 'gnome-session':
                     default = 'gnome-terminal'
