@@ -85,7 +85,6 @@ class TerminalSelector():
         else:
             ps = 'ps -eo comm | grep -E "gnome-session|ksmserver|' + \
                 'xfce4-session" | grep -v grep'
-            subprocess.call(ps)
             wm = [x.replace("\n", '') for x in subprocess.call(ps)]
             
             if wm:
