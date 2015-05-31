@@ -126,6 +126,11 @@ class TerminalCommand():
                 cwd = dir_
             else:
                 cwd = dir_.encode(encoding)
+
+            #fixing for elementaryOS
+            args.append('-w')
+            args.append(cwd)
+
             subprocess.Popen(args, cwd=cwd)
 
         except (OSError) as exception:
