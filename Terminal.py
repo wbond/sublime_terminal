@@ -128,8 +128,9 @@ class TerminalCommand():
                 cwd = dir_.encode(encoding)
 
             #fixing for elementaryOS
-            args.append('-w')
-            args.append(cwd)
+            if args[0] == 'pantheon-terminal':
+                args.append('-w')
+                args.append(cwd)
 
             subprocess.Popen(args, cwd=cwd)
 
