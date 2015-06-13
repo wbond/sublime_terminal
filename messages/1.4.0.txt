@@ -1,0 +1,2 @@
+Sublime Terminal 1.4.0 Changelog:
+- Added support for Sublime Text 3

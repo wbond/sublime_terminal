@@ -6,11 +6,20 @@ import subprocess
 import locale
 
 if os.name == 'nt':
-    import _winreg
-
+    try:
+        import _winreg
+    except (ImportError):
+        import winreg as _winreg
+    from ctypes import windll, create_unicode_buffer
 
 class NotFoundError(Exception):
     pass
+
+
+if sys.version_info >= (3,):
+    installed_dir, _ = __name__.split('.')
+else:
+    installed_dir = os.path.basename(os.getcwd())
 
 
 class TerminalSelector():
@@ -19,7 +28,7 @@ class TerminalSelector():
     @staticmethod
     def get():
         settings = sublime.load_settings('Terminal.sublime-settings')
-        package_dir = os.path.join(sublime.packages_path(), __name__)
+        package_dir = os.path.join(sublime.packages_path(), installed_dir)
 
         terminal = settings.get('terminal')
         if terminal:
@@ -29,7 +38,7 @@ class TerminalSelector():
                 if os.path.exists(joined_terminal):
                     terminal = joined_terminal
                     if not os.access(terminal, os.X_OK):
-                        os.chmod(terminal, 0755)
+                        os.chmod(terminal, 0o755)
             return terminal
 
         if TerminalSelector.default:
@@ -58,17 +67,24 @@ class TerminalSelector():
                     _winreg.SetValueEx(key, 'ColorTable06', 0,
                         _winreg.REG_DWORD, 15789550)
                 default = os.path.join(package_dir, 'PS.bat')
+                sublime_terminal_path = os.path.join(sublime.packages_path(), installed_dir)
+                # This should turn the path into an 8.3-style path, getting around unicode
+                # issues and spaces
+                buf = create_unicode_buffer(512)
+                if windll.kernel32.GetShortPathNameW(sublime_terminal_path, buf, len(buf)):
+                    sublime_terminal_path = buf.value
+                os.putenv('sublime_terminal_path', sublime_terminal_path.replace(' ', '` '))
             else :
                 default = os.environ['SYSTEMROOT'] + '\\System32\\cmd.exe'
 
         elif sys.platform == 'darwin':
             default = os.path.join(package_dir, 'Terminal.sh')
             if not os.access(default, os.X_OK):
-                os.chmod(default, 0755)
+                os.chmod(default, 0o755)
 
         else:
-            ps = 'ps -eo comm | grep -E "gnome-session|ksmserver|lxsession|' + \
-                'xfce4-session" | grep -v grep'
+            ps = 'ps -eo comm | grep -E "gnome-session|ksmserver|' + \
+                'xfce4-session|lxsession" | grep -v grep'
             wm = [x.replace("\n", '') for x in os.popen(ps)]
             if wm:
                 if wm[0] == 'gnome-session':
@@ -95,27 +111,31 @@ class TerminalCommand():
         elif self.window.folders():
             return self.window.folders()[0]
         else:
-            sublime.error_message(__name__ + ': No place to open terminal to')
+            sublime.error_message('Terminal: No place to open terminal to')
             return False
 
-    def run_terminal(self, dir, parameters):
+    def run_terminal(self, dir_, parameters):
         try:
-            if not dir:
+            if not dir_:
                 raise NotFoundError('The file open in the selected view has ' +
                     'not yet been saved')
             for k, v in enumerate(parameters):
-                parameters[k] = v.replace('%CWD%', dir)
+                parameters[k] = v.replace('%CWD%', dir_)
             args = [TerminalSelector.get()]
             args.extend(parameters)
             encoding = locale.getpreferredencoding(do_setlocale=True)
-            subprocess.Popen(args, cwd=dir.encode(encoding))
+            if sys.version_info >= (3,):
+                cwd = dir_
+            else:
+                cwd = dir_.encode(encoding)
+            subprocess.Popen(args, cwd=cwd)
 
-        except (OSError) as (exception):
-            print str(exception)
-            sublime.error_message(__name__ + ': The terminal ' +
+        except (OSError) as exception:
+            print(str(exception))
+            sublime.error_message('Terminal: The terminal ' +
                 TerminalSelector.get() + ' was not found')
-        except (Exception) as (exception):
-            sublime.error_message(__name__ + ': ' + str(exception))
+        except (Exception) as exception:
+            sublime.error_message('Terminal: ' + str(exception))
 
 
 class OpenTerminalCommand(sublime_plugin.WindowCommand, TerminalCommand):
