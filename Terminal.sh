@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CD_CMD="cd "\\\"$(pwd)\\\"" && clear"
+CD_CMD="cd "\\\"$(pwd)\\\""; clear"
 VERSION=$(sw_vers -productVersion)
 if (( $(expr $VERSION '<' 10.7.0) )); then
 	IN_WINDOW="in window 1"
