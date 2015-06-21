@@ -1,0 +1,4 @@
+Sublime Terminal 1.7.0 Changelog:
+- Introduced OS specific settings via @ErichDonGubler in #79
+    - https://github.com/wbond/sublime_terminal/pull/79
+    - These can be accessed via "Preferences -> Package Settings -> Terminal -> Settings - More -> OS Specific - User"
