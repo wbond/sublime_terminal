@@ -2,14 +2,13 @@
 
 CD_CMD="cd "\\\"$(pwd)\\\"" && clear"
 VERSION=$(sw_vers -productVersion)
-NEWWINDOW=0
+NEWTAB=0
 
 while [ "$1" != "" ]; do
 	case $1 in
-		--openNewWindow )   NEWWINDOW=1
-												;;
-		--openNewTab )      NEWWINDOW=0
-												;;
+		--openNewTab)
+			NEWTAB=1
+			;;
 	esac
 	shift
 done
@@ -17,7 +16,7 @@ done
 if (( $(expr $VERSION '<' 10.7) )); then
 	RUNNING=$(osascript<<END
 	tell application "System Events"
-			count(processes whose name is "iTerm")
+		count(processes whose name is "iTerm")
 	end tell
 END
 )
@@ -37,11 +36,10 @@ if (( ! $RUNNING )); then
 	end tell
 END
 else
-	if (( $NEWWINDOW )); then
+	if (( $NEWTAB )); then
 		osascript &>/dev/null <<EOF
 		tell application "iTerm"
-			set term to (make new terminal)
-			tell term
+			tell current terminal
 				launch session "Default Session"
 				tell the last session
 					write text "$CD_CMD"
@@ -52,7 +50,8 @@ EOF
 	else
 		osascript &>/dev/null <<EOF
 		tell application "iTerm"
-			tell current terminal
+			set term to (make new terminal)
+			tell term
 				launch session "Default Session"
 				tell the last session
 					write text "$CD_CMD"
