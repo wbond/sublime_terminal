@@ -5,8 +5,10 @@ VERSION=$(sw_vers -productVersion)
 NEWTAB=0
 
 while [ "$1" != "" ]; do
-	case $1 in
-		--openNewTab)
+	PARAM=`echo $1 | awk -F= '{print $1}'`
+	VALUE=`echo $1 | awk -F= '{print $2}'`
+	case $PARAM in
+		-t | --tab)
 			NEWTAB=1
 			;;
 	esac
