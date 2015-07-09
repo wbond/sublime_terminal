@@ -2,14 +2,14 @@
 
 CD_CMD="cd "\\\"$(pwd)\\\"" && clear"
 VERSION=$(sw_vers -productVersion)
-NEWTAB=0
+OPEN_IN_TAB=0
 
 while [ "$1" != "" ]; do
 	PARAM=`echo $1 | awk -F= '{print $1}'`
 	VALUE=`echo $1 | awk -F= '{print $2}'`
 	case $PARAM in
-		-t | --tab)
-			NEWTAB=1
+		--open-in-tab)
+			OPEN_IN_TAB=1
 			;;
 	esac
 	shift
@@ -18,7 +18,7 @@ done
 if (( $(expr $VERSION '<' 10.7) )); then
 	RUNNING=$(osascript<<END
 	tell application "System Events"
-		count(processes whose name is "iTerm")
+	    count(processes whose name is "iTerm")
 	end tell
 END
 )
@@ -38,7 +38,7 @@ if (( ! $RUNNING )); then
 	end tell
 END
 else
-	if (( $NEWTAB )); then
+	if (( $OPEN_IN_TAB )); then
 		osascript &>/dev/null <<EOF
 		tell application "iTerm"
 			tell current terminal
