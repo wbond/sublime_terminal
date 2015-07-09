@@ -5,9 +5,9 @@ VERSION=$(sw_vers -productVersion)
 OPEN_IN_TAB=0
 
 while [ "$1" != "" ]; do
-	PARAM=`echo $1 | awk -F= '{print $1}'`
-	VALUE=`echo $1 | awk -F= '{print $2}'`
-	case $PARAM in
+	PARAM="$1"
+	VALUE="$2"
+	case "$PARAM" in
 		--open-in-tab)
 			OPEN_IN_TAB=1
 			;;
