@@ -16,14 +16,47 @@
                         "children":
                         [
                             {
-                                "command": "open_file", 
+                                "command": "open_file",
                                 "args": {"file": "${packages}/Terminal/Terminal.sublime-settings"},
                                 "caption": "Settings – Default"
                             },
                             {
-                                "command": "open_file", 
+                                "command": "open_file",
                                 "args": {"file": "${packages}/User/Terminal.sublime-settings"},
                                 "caption": "Settings – User"
+                            },
+                            {
+                                "caption": "Settings – More",
+                                "children":
+                                [
+                                    {
+                                        "command": "open_file",
+                                        "args": {
+                                            "file": "${packages}/User/Terminal (Windows).sublime-settings",
+                                            "platform": "Windows"
+                                        },
+                                        "caption": "OS Specific – User"
+                                    },
+                                    {
+                                        "command": "open_file",
+                                        "args": {
+                                            "file": "${packages}/User/Terminal (OSX).sublime-settings",
+                                            "platform": "OSX"
+                                        },
+                                        "caption": "OS Specific – User"
+                                    },
+                                    {
+                                        "command": "open_file",
+                                        "args": {
+                                            "file": "${packages}/User/Terminal (Linux).sublime-settings",
+                                            "platform": "Linux"
+                                        },
+                                        "caption": "OS Specific – User"
+                                    }
+                                ]
+                            },
+                            {
+                                "caption": "-"
                             },
                             {
                                 "command": "open_file",

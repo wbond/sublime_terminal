@@ -21,16 +21,25 @@ if sys.version_info >= (3,):
 else:
     installed_dir = os.path.basename(os.getcwd())
 
+def get_setting(key, default=None):
+    settings = sublime.load_settings('Terminal.sublime-settings')
+    os_specific_settings = {}
+    if os.name == 'nt':
+        os_specific_settings = sublime.load_settings('Terminal (Windows).sublime-settings')
+    elif os.name == 'darwin':
+        os_specific_settings = sublime.load_settings('Terminal (OSX).sublime-settings')
+    else:
+        os_specific_settings = sublime.load_settings('Terminal (Linux).sublime-settings')
+    return os_specific_settings.get(key, settings.get(key, default))
+
 
 class TerminalSelector():
     default = None
 
     @staticmethod
     def get():
-        settings = sublime.load_settings('Terminal.sublime-settings')
         package_dir = os.path.join(sublime.packages_path(), installed_dir)
-
-        terminal = settings.get('terminal')
+        terminal = get_setting('terminal')
         if terminal:
             dir, executable = os.path.split(terminal)
             if not dir:
@@ -84,15 +93,19 @@ class TerminalSelector():
 
         else:
             ps = 'ps -eo comm | grep -E "gnome-session|ksmserver|' + \
-                'xfce4-session" | grep -v grep'
+                'xfce4-session|lxsession|mate-panel|cinnamon-sessio" | grep -v grep'
             wm = [x.replace("\n", '') for x in os.popen(ps)]
             if wm:
-                if wm[0] == 'gnome-session':
+                if wm[0] == 'gnome-session' or wm[0] == 'cinnamon-sessio':
                     default = 'gnome-terminal'
                 elif wm[0] == 'xfce4-session':
-                    default = 'terminal'
+                    default = 'xfce4-terminal'
                 elif wm[0] == 'ksmserver':
                     default = 'konsole'
+                elif wm[0] == 'lxsession':
+                    default = 'lxterminal'
+                elif wm[0] == 'mate-panel':
+                    default = 'mate-terminal'
             if not default:
                 default = 'xterm'
 
@@ -142,12 +155,7 @@ class OpenTerminalCommand(sublime_plugin.WindowCommand, TerminalCommand):
         if not path:
             return
 
-        if parameters == None:
-            settings = sublime.load_settings('Terminal.sublime-settings')
-            parameters = settings.get('parameters')
-
-        if not parameters:
-            parameters = []
+        parameters = get_setting('parameters', [])
 
         if os.path.isfile(path):
             path = os.path.dirname(path)
