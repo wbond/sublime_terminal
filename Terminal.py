@@ -170,7 +170,10 @@ class OpenTerminalProjectFolderCommand(sublime_plugin.WindowCommand,
         if not path:
             return
 
-        folders = [x for x in self.window.folders() if path.find(x) == 0][0:1]
+        # DEV: We require separator to be appended since `/hello` and `/hello-world`
+        #   would both match a file in `/hello` without it
+        #   For more info, see https://github.com/wbond/sublime_terminal/issues/86
+        folders = [x for x in self.window.folders() if path.find(x + os.sep) == 0][0:1]
 
         command = OpenTerminalCommand(self.window)
         command.run(folders, parameters=parameters)
