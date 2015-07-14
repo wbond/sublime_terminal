@@ -44,7 +44,12 @@ else
 	if (( $OPEN_IN_TAB )); then
 		osascript &>/dev/null <<EOF
 		tell application "iTerm"
-			tell current terminal
+			if (count of terminals) = 0 then
+				set term to (make new terminal)
+			else
+				set term to current terminal
+			end if
+			tell term
 				launch session "Default Session"
 				tell the last session
 					write text "$CD_CMD"
