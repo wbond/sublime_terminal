@@ -117,7 +117,9 @@ class TerminalCommand():
     def get_path(self, paths):
         if paths:
             return paths[0]
-        elif self.window.active_view():
+        # DEV: On ST3, there is always an active view.
+        #   Be sure to check that it's a file with a path (not temporary view)
+        elif self.window.active_view() and self.window.active_view().file_name():
             return self.window.active_view().file_name()
         elif self.window.folders():
             return self.window.folders()[0]
