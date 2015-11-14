@@ -31,6 +31,45 @@ The default settings can be viewed by accessing the ***Preferences > Package Set
      - The parameters to pass to the terminal. These parameters will be used if no [custom parameters](#custom-parameters) are passed via a key binding.
      - *Default:* ***[]***
 
+### Examples
+
+Here are some example setups:
+
+#### Cmder on Windows
+
+```js
+{
+  // Replace with your own path to cmder.exe
+  "terminal": "C:\\Program Files\\cmder_mini\\cmder.exe",
+  "parameters": ["/START", "%CWD%"]
+}
+```
+
+#### xterm on GNU/Linux
+
+```js
+{
+  "terminal": "xterm"
+}
+```
+
+#### iTerm on OS X
+
+```js
+{
+  "terminal": "iTerm.sh"
+}
+```
+
+#### iTerm on OS X with tabs
+
+```js
+{
+  "terminal": "iTerm.sh",
+  "parameters": ["--open-in-tab"]
+}
+```
+
 ## Custom Parameters
 
 With the parameters argument to the *open_terminal* and *open_terminal_project_folder* commands, it is possible to construct custom terminal environments.
