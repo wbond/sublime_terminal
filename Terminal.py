@@ -1,5 +1,6 @@
 import sublime
 import sublime_plugin
+import errno
 import os
 import sys
 import subprocess
@@ -144,9 +145,16 @@ class TerminalCommand():
             subprocess.Popen(args, cwd=cwd)
 
         except (OSError) as exception:
-            print(str(exception))
-            sublime.error_message('Terminal: The terminal ' +
-                TerminalSelector.get() + ' was not found')
+            # By default, use and log the message from our error
+            message = str(exception)
+            print(message)
+
+            # If the terminal wasn't found, then use a better message
+            if exception.errno == errno.ENOENT:
+                message = 'Terminal: The terminal ' + TerminalSelector.get() + ' was not found'
+
+            # Notify the user of the issue
+            sublime.error_message(message)
         except (Exception) as exception:
             sublime.error_message('Terminal: ' + str(exception))
 
