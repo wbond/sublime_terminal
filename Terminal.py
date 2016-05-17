@@ -96,7 +96,7 @@ class TerminalSelector():
                 'xfce4-session|lxsession|mate-panel|cinnamon-sessio" | grep -v grep'
             wm = [x.replace("\n", '') for x in os.popen(ps)]
             if wm:
-                if wm[0] == 'gnome-session' or wm[0] == 'cinnamon-sessio':
+                if 'gnome-session' in wm[0] or wm[0] == 'cinnamon-sessio':
                     default = 'gnome-terminal'
                 elif wm[0] == 'xfce4-session':
                     default = 'xfce4-terminal'
