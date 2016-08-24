@@ -1,5 +1,13 @@
 # changelog
 
+## 1.12.0
+
+ - Fixed gnome-terminal support via @beledouxdenis in #115
+
+## 1.11.0
+
+ - Fixed custom parameters functionality via @jfcherng in #112
+
 ## 1.10.1
 
  - Replaced `readme.creole` with `readme.md` based off of website
