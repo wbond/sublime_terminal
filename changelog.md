@@ -1,5 +1,9 @@
 # changelog
 
+## 1.13.0
+
+ - Added iTerm2-v3 support via @pzgz in #98
+
 ## 1.12.1
 
  - Added missing changelog notes
