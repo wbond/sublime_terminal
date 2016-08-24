@@ -1,0 +1,7 @@
+Sublime Terminal 1.13.0 Changelog:
+- Added support for iTerm2 v3 via @pzgz in #98
+    - https://github.com/wbond/sublime_terminal/pull/98
+    - This can be configured via:
+        {
+          "terminal": "iTerm2-v3.sh"
+        }

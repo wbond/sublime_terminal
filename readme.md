@@ -70,6 +70,14 @@ Here are some example setups:
 }
 ```
 
+#### iTerm2 v3 on OS X
+
+```js
+{
+  "terminal": "iTerm2-v3.sh"
+}
+```
+
 ## Custom Parameters
 
 With the parameters argument to the *open_terminal* and *open_terminal_project_folder* commands, it is possible to construct custom terminal environments.
