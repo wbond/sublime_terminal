@@ -1,5 +1,9 @@
 # changelog
 
+## 1.12.1
+
+ - Added missing changelog notes
+
 ## 1.12.0
 
  - Fixed gnome-terminal support via @beledouxdenis in #115
