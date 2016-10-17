@@ -1,5 +1,9 @@
 # changelog
 
+## 1.15.0
+
+ - Fixed iTerm2-v3 script opening multiple tabs if never opened before via @ctf0 in #131
+
 ## 1.14.0
 
  - Fixed iTerm2-v3 script navigation and window activation via @garyking in #133
