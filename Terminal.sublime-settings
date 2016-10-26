@@ -1,6 +1,6 @@
 {
-	// The command to execute for the terminal, leave blank for the OS default
-	// On OS X the terminal can be set to iTerm.sh to execute iTerm (or iTerm2-v3.sh for iTerm2 build 3.x)
+	// The command to execute for the terminal, leave blank for the OS default and see
+	// https://github.com/wbond/sublime_terminal#examples for more details
 	"terminal": "",
 
 	// A list of default parameters to pass to the terminal, this can be
