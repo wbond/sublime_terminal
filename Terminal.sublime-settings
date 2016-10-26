@@ -1,6 +1,6 @@
 {
-	// The command to execute for the terminal, leave blank for the OS default and see
-	// https://github.com/wbond/sublime_terminal#examples for more details
+	// The command to execute for the terminal, leave blank for the OS default
+	// See https://github.com/wbond/sublime_terminal#examples for examples
 	"terminal": "",
 
 	// A list of default parameters to pass to the terminal, this can be
