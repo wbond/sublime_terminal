@@ -31,7 +31,7 @@ fi
 
 if (( ! $RUNNING )); then
 	osascript<<END
-	tell application "iTerm"
+	tell application "iTerm2"
 		tell current window
 			tell current session
 				write text "$CD_CMD"
@@ -44,7 +44,7 @@ END
 else
 	if (( $OPEN_IN_TAB )); then
 		osascript &>/dev/null <<EOF
-		tell application "iTerm"
+		tell application "iTerm2"
 			if (count of windows) = 0 then
 				set theWindow to (create window with default profile)
 				set theSession to current session of theWindow
@@ -64,7 +64,7 @@ else
 EOF
 	else
 		osascript &>/dev/null <<EOF
-		tell application "iTerm"
+		tell application "iTerm2"
 			tell (create window with default profile)
 				tell the current session
 					write text "$CD_CMD"
