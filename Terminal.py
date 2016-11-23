@@ -128,6 +128,10 @@ class TerminalCommand():
             return False
 
     def run_terminal(self, dir_, parameters):
+        def to_system_encoding(string):
+            encoding = locale.getpreferredencoding(do_setlocale=True)
+            return string.encode(encoding)
+
         try:
             if not dir_:
                 raise NotFoundError('The file open in the selected view has ' +
@@ -136,11 +140,13 @@ class TerminalCommand():
                 parameters[k] = v.replace('%CWD%', dir_)
             args = [TerminalSelector.get()]
             args.extend(parameters)
-            encoding = locale.getpreferredencoding(do_setlocale=True)
+
+            args = [to_system_encoding(item) for item in args]
+
             if sys.version_info >= (3,):
                 cwd = dir_
             else:
-                cwd = dir_.encode(encoding)
+                cwd = to_system_encoding(dir_)
             subprocess.Popen(args, cwd=cwd)
 
         except (OSError) as exception:
