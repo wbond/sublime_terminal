@@ -12,7 +12,5 @@ $newsize.width = 120
 $pswindow.windowsize = $newsize
 
 $pswindow.windowtitle = "Windows Powershell"
-$pswindow.foregroundcolor = "DarkYellow"
-$pswindow.backgroundcolor = "DarkMagenta"
 
 cls
