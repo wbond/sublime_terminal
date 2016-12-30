@@ -141,7 +141,11 @@ class TerminalCommand():
                 cwd = dir_
             else:
                 cwd = dir_.encode(encoding)
-            subprocess.Popen(args, cwd=cwd)
+            env = os.environ.copy()
+            if 'LD_PRELOAD' in env:
+                ld_preload = env.pop('LD_PRELOAD')
+                print('Terminal: LD_PRELOAD ("{}") is unset before launch'.format(ld_preload))
+            subprocess.Popen(args, cwd=cwd, env=env)
 
         except (OSError) as exception:
             print(str(exception))
