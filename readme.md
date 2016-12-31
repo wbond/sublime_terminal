@@ -54,7 +54,7 @@ Here are some example setups:
 
 ```js
 {
-  "terminal": "xterm",
+  "terminal": "xterm"
 }
 ```
 
