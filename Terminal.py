@@ -4,6 +4,7 @@ import os
 import sys
 import subprocess
 import locale
+import string
 
 if os.name == 'nt':
     try:
@@ -113,6 +114,14 @@ class TerminalSelector():
         return default
 
 
+class SafeFormatter(string.Formatter):
+    def get_value(self, key, args, kwds):
+        if isinstance(key, str):
+            return kwds.get(key, '')
+        else:
+            Formatter.get_value(key, args, kwds)
+
+
 class TerminalCommand():
     def get_path(self, paths):
         if paths:
@@ -136,15 +145,22 @@ class TerminalCommand():
                 parameters[k] = v.replace('%CWD%', dir_)
             args = [TerminalSelector.get()]
             args.extend(parameters)
+
             encoding = locale.getpreferredencoding(do_setlocale=True)
             if sys.version_info >= (3,):
                 cwd = dir_
             else:
                 cwd = dir_.encode(encoding)
+
+            env_setting = get_setting('env')
             env = os.environ.copy()
-            if 'LD_PRELOAD' in env:
-                ld_preload = env.pop('LD_PRELOAD')
-                print('Terminal: LD_PRELOAD ("{}") is unset before launch'.format(ld_preload))
+            fmt = SafeFormatter()
+            for k in env_setting:
+                if env_setting[k] is None:
+                    env.pop(k, None)
+                else:
+                    env[k] = fmt.format(env_setting[k], **os.environ)
+
             subprocess.Popen(args, cwd=cwd, env=env)
 
         except (OSError) as exception:

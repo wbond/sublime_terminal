@@ -30,6 +30,11 @@ The default settings can be viewed by accessing the ***Preferences > Package Set
  - **parameters**
      - The parameters to pass to the terminal. These parameters will be used if no [custom parameters](#custom-parameters) are passed via a key binding.
      - *Default:* ***[]***
+ - **env**
+     - The environment variables changeset. Default environment variables used when invoking the terminal are inherited from sublime.
+     - Use `null` to indicate that the environment variable should be unset.
+     - Use named format spec to reference any existing environment variable (e.g. `{"PATH":"{PATH}:."}`).
+     - *Default:* ***{}***
 
 ### Examples
 
@@ -49,7 +54,9 @@ Here are some example setups:
 
 ```js
 {
-  "terminal": "xterm"
+  "terminal": "xterm",
+  // Include "." in environment variable PATH, and unset LD_PRELOAD
+  "env": {"PATH": "{PATH}:.", "LD_PRELOAD": null}
 }
 ```
 
