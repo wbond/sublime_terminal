@@ -13,5 +13,5 @@
     // terminal are inherited from sublime. Use this mapping to overwrite/unset. Use
     // null value to indicate that the environment variable should be unset. Use named
     // format spec to reference any existing environment variable (e.g. {"PATH":"{PATH}:."}).
-    "env": {}
+	"env": {}
 }
