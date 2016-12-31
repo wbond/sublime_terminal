@@ -55,10 +55,17 @@ Here are some example setups:
 ```js
 {
   "terminal": "xterm",
-  // Include "." in environment variable PATH, and unset LD_PRELOAD
-  "env": {"PATH": "{PATH}:.", "LD_PRELOAD": null}
 }
 ```
+
+#### gnome-terminal for CJK users on GNU/Linux
+
+```js
+{
+  "terminal": "gnome-terminal",
+  // Unset LD_PRELOAD which may cause problems for sublime with imfix
+  "env": {"LD_PRELOAD": null}
+}
 
 #### iTerm on OS X
 
