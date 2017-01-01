@@ -32,8 +32,7 @@ The default settings can be viewed by accessing the ***Preferences > Package Set
      - *Default:* ***[]***
  - **env**
      - The environment variables changeset. Default environment variables used when invoking the terminal are inherited from sublime.
-     - Use `null` to indicate that the environment variable should be unset.
-     - Use named format spec to reference any existing environment variable (e.g. `{"PATH":"{PATH}:."}`).
+     - The changeset may be used to overwrite/unset environment variables. Use `null` to indicate that the environment variable should be unset.
      - *Default:* ***{}***
 
 ### Examples
