@@ -1,4 +1,7 @@
 # changelog
+## 1.16.0
+
+ - Added support for environment customization via @peterfyj in #150
 
 ## 1.15.1
 
