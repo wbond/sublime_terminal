@@ -82,7 +82,7 @@ class TerminalSelector():
                 buf = create_unicode_buffer(512)
                 if windll.kernel32.GetShortPathNameW(sublime_terminal_path, buf, len(buf)):
                     sublime_terminal_path = buf.value
-                os.putenv('sublime_terminal_path', sublime_terminal_path.replace(' ', '` '))
+                os.environ['sublime_terminal_path'] = sublime_terminal_path.replace(' ', '` ')
             else :
                 default = os.environ['SYSTEMROOT'] + '\\System32\\cmd.exe'
 
