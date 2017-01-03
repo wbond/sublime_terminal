@@ -1,4 +1,8 @@
 # changelog
+## 1.16.1
+
+ - Fixed Windows Powershell support. Fixes #151
+
 ## 1.16.0
 
  - Added support for environment customization via @peterfyj in #150
