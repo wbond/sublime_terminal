@@ -143,6 +143,7 @@ class TerminalCommand():
             else:
                 cwd = dir_.encode(encoding)
 
+            # Copy over environment settings onto parent environment
             env_setting = get_setting('env', {})
             env = os.environ.copy()
             for k in env_setting:
@@ -151,6 +152,17 @@ class TerminalCommand():
                 else:
                     env[k] = env_setting[k]
 
+            # Normalize environment settings for ST2
+            # https://github.com/wbond/sublime_terminal/issues/154
+            # http://stackoverflow.com/a/4987414
+            for k in env:
+                if not isinstance(env[k], str):
+                    if isinstance(env[k], unicode):
+                        env[k] = env[k].encode('utf8')
+                    else:
+                        print('Unsupported environment variable type. Expected "str" or "unicode"', env[k])
+
+            # Run our process
             subprocess.Popen(args, cwd=cwd, env=env)
 
         except (OSError) as exception:
