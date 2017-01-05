@@ -143,7 +143,7 @@ class TerminalCommand():
             else:
                 cwd = dir_.encode(encoding)
 
-            env_setting = get_setting('env')
+            env_setting = get_setting('env', {})
             env = os.environ.copy()
             for k in env_setting:
                 if env_setting[k] is None:
