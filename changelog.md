@@ -1,4 +1,8 @@
 # changelog
+## 1.16.2
+
+ - Added fallback for env setting. Fixes #154
+
 ## 1.16.1
 
  - Fixed Windows Powershell support. Fixes #151
