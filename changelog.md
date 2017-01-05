@@ -1,4 +1,8 @@
 # changelog
+## 1.16.3
+
+ - Added unicode to str normalization for environment. Fixes #154
+
 ## 1.16.2
 
  - Added fallback for env setting. Fixes #154
