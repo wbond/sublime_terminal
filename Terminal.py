@@ -96,10 +96,14 @@ class TerminalSelector():
                 'xfce4-session|lxsession|mate-panel|cinnamon-sessio)" | grep -v grep'
             wm = [x.replace("\n", '') for x in os.popen(ps)]
             if wm:
+                # elementary OS: `/usr/lib/gnome-session/gnome-session-binary --session=pantheon`
                 # Gnome: `gnome-session` or `gnome-session-binary`
                 # Linux Mint Cinnamon: `cinnamon-session --session cinnamon`
                 if wm[0].startswith('gnome-session') or wm[0].startswith('cinnamon-sessio'):
-                    default = 'gnome-terminal'
+                    if 'pantheon' in wm[0]:
+                        default = 'pantheon-terminal'
+                    else:
+                        default = 'gnome-terminal'
                 elif wm[0].startswith('xfce4-session'):
                     default = 'xfce4-terminal'
                 elif wm[0].startswith('ksmserver'):
