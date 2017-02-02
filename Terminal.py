@@ -26,7 +26,7 @@ def get_setting(key, default=None):
     os_specific_settings = {}
     if os.name == 'nt':
         os_specific_settings = sublime.load_settings('Terminal (Windows).sublime-settings')
-    elif os.name == 'darwin':
+    elif sys.platform == 'darwin':
         os_specific_settings = sublime.load_settings('Terminal (OSX).sublime-settings')
     else:
         os_specific_settings = sublime.load_settings('Terminal (Linux).sublime-settings')
