@@ -1,4 +1,8 @@
 # changelog
+## 1.17.0
+
+ - Fixed OS X settings via @drbarrett in #162
+
 ## 1.16.3
 
  - Added unicode to str normalization for environment. Fixes #154
