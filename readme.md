@@ -68,17 +68,25 @@ Here are some example setups:
 
 #### iTerm on OS X
 
-```js
-{
-  "terminal": "iTerm.sh"
-}
-```
+* iTerm
+  ```js
+  {
+    "terminal": "iTerm.sh"
+  }
+  ```
+
+* iTerm2
+  ```js
+  {
+    "terminal": "iTerm2.sh"
+  }
+  ```
 
 #### iTerm on OS X with tabs
 
 ```js
 {
-  "terminal": "iTerm.sh",
+  "terminal": "iTerm.sh", # According to your version of iTerm.
   "parameters": ["--open-in-tab"]
 }
 ```
