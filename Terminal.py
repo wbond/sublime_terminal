@@ -116,6 +116,9 @@ class TerminalSelector():
 class TerminalCommand():
     def get_path(self, paths):
         if paths:
+            for path in paths:
+                if os.path.expanduser(path) in self.window.active_view().file_name():
+                    return path
             return paths[0]
         # DEV: On ST3, there is always an active view.
         #   Be sure to check that it's a file with a path (not temporary view)
@@ -128,16 +131,25 @@ class TerminalCommand():
             return False
 
     def run_terminal(self, dir_, parameters):
+        view = self.window.active_view()
+        replaces = {
+            '%CWD%': dir_,
+            '%FILE%': self.window.active_view().file_name(),
+            '%LINE%': str(view.rowcol(view.sel()[0].begin())[0] + 1)
+        }
         try:
             if not dir_:
                 raise NotFoundError('The file open in the selected view has ' +
                     'not yet been saved')
             for k, v in enumerate(parameters):
-                parameters[k] = v.replace('%CWD%', dir_)
+                for old, new in replaces.items():
+                    v = v.replace(old, new)
+                parameters[k] = v
             args = [TerminalSelector.get()]
             args.extend(parameters)
 
             encoding = locale.getpreferredencoding(do_setlocale=True)
+            dir_ = os.path.expanduser(dir_)
             if sys.version_info >= (3,):
                 cwd = dir_
             else:
