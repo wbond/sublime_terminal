@@ -92,19 +92,25 @@ class TerminalSelector():
                 os.chmod(default, 0o755)
 
         else:
-            ps = 'ps -eo comm | grep -E "gnome-session|ksmserver|' + \
-                'xfce4-session|lxsession|mate-panel|cinnamon-sessio" | grep -v grep'
+            ps = 'ps -eo comm,args | grep -E "^(gnome-session|ksmserver|' + \
+                'xfce4-session|lxsession|mate-panel|cinnamon-sessio)" | grep -v grep'
             wm = [x.replace("\n", '') for x in os.popen(ps)]
             if wm:
-                if 'gnome-session' in wm[0] or wm[0] == 'cinnamon-sessio':
-                    default = 'gnome-terminal'
-                elif wm[0] == 'xfce4-session':
+                # elementary OS: `/usr/lib/gnome-session/gnome-session-binary --session=pantheon`
+                # Gnome: `gnome-session` or `gnome-session-binary`
+                # Linux Mint Cinnamon: `cinnamon-session --session cinnamon`
+                if wm[0].startswith('gnome-session') or wm[0].startswith('cinnamon-sessio'):
+                    if 'pantheon' in wm[0]:
+                        default = 'pantheon-terminal'
+                    else:
+                        default = 'gnome-terminal'
+                elif wm[0].startswith('xfce4-session'):
                     default = 'xfce4-terminal'
-                elif wm[0] == 'ksmserver':
+                elif wm[0].startswith('ksmserver'):
                     default = 'konsole'
-                elif wm[0] == 'lxsession':
+                elif wm[0].startswith('lxsession'):
                     default = 'lxterminal'
-                elif wm[0] == 'mate-panel':
+                elif wm[0].startswith('mate-panel'):
                     default = 'mate-terminal'
             if not default:
                 default = 'xterm'
