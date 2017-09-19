@@ -1,0 +1,17 @@
+{
+    "parameters":
+    [
+        "$ext = [IO.Path]::GetExtension(%FILE%)\n",
+        "$file = %FILE%\n",
+        "switch ($ext){\n",
+
+        // >>>>>>>>>> add your command here <<<<<<<<<
+        ".py {python $file}\n",
+        ".nim {nim c -r $file}\n",
+
+
+        "default {Write-Host \"Please edit 'Terminal (Windows).sublime-settings' and add your support for file type: $ext\"}\n}\n",
+        "echo -----------------------------------------------------------\n",
+        "pause",
+    ]
+}

@@ -133,6 +133,63 @@ class TerminalCommand():
             sublime.error_message('Terminal: No place to open terminal to')
             return False
 
+    def terminal_build(self, dir_, parameters, file_abspath):
+        try:
+            if not dir_:
+                raise NotFoundError('The file open in the selected view has ' +
+                    'not yet been saved')
+
+            for k, v in enumerate(parameters):
+                parameters[k] = v.replace('%CWD%', dir_).replace(r'%FILE%', '"%s"'%file_abspath)
+            args = [TerminalSelector.get()]
+            args.extend(parameters)
+            if os.name == 'nt':
+                powershell = os.environ['SYSTEMROOT'] + \
+                    '\\System32\\WindowsPowerShell\\v1.0\\powershell.exe'
+                if os.path.exists(powershell):
+                    args[0] = powershell
+            else:
+                raise NotImplementedError('Build on new terminal is not implemented for your system.')
+            encoding = locale.getpreferredencoding(do_setlocale=True)
+            if sys.version_info >= (3,):
+                cwd = dir_
+            else:
+                cwd = dir_.encode(encoding)
+
+            # Copy over environment settings onto parent environment
+            env_setting = get_setting('env', {})
+            env = os.environ.copy()
+            for k in env_setting:
+                if env_setting[k] is None:
+                    env.pop(k, None)
+                else:
+                    env[k] = env_setting[k]
+
+            # Normalize environment settings for ST2
+            # https://github.com/wbond/sublime_terminal/issues/154
+            # http://stackoverflow.com/a/4987414
+            for k in env:
+                if not isinstance(env[k], str):
+                    if isinstance(env[k], unicode):
+                        env[k] = env[k].encode('utf8')
+                    else:
+                        print('Unsupported environment variable type. Expected "str" or "unicode"', env[k])
+            # Run our process
+            view = sublime.active_window().active_view()
+            if view.is_dirty() and view.file_name():
+                view.run_command('save')
+            subprocess.Popen(args, cwd=cwd, env=env)
+
+        except (OSError) as exception:
+            print(str(exception))
+            sublime.error_message('Terminal: The terminal ' +
+                TerminalSelector.get() + ' was not found')
+        except (Exception) as exception:
+            sublime.error_message('Terminal: ' + str(exception))
+
+
+
+
     def run_terminal(self, dir_, parameters):
         try:
             if not dir_:
@@ -192,6 +249,29 @@ class OpenTerminalCommand(sublime_plugin.WindowCommand, TerminalCommand):
             path = os.path.dirname(path)
 
         self.run_terminal(path, parameters)
+
+
+
+class TerminalBuildCommand(sublime_plugin.WindowCommand, TerminalCommand):
+    def run(self, paths=[], parameters=None):
+        path = self.get_path(paths)
+        if not path:
+            return
+
+        if parameters is None:
+            parameters = get_setting('parameters', [])
+
+        if os.path.isfile(path):
+            file_abspath = path
+            path = os.path.dirname(path)
+
+        self.terminal_build(path, parameters, file_abspath)
+
+
+
+
+
+
 
 
 class OpenTerminalProjectFolderCommand(sublime_plugin.WindowCommand,
