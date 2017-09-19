@@ -1,11 +1,13 @@
 # Sublime Terminal
 
-Shortcuts and menu entries for opening a terminal at the current file, or the current root project folder in [Sublime Text](http://sublimetext.com/).
+Shortcuts and menu entries for opening a terminal at the current file, or the current root project folder in [Sublime Text](http://sublimetext.com/). Or build/run current
+ file in new terminal.  
 
 ## Features
 
  - Opens a terminal in the folder containing the currently edited file
  - Opens a terminal in the project folder containing the currently edited file
+ - Opens a terminal and build current file on Windows. For Linux/OSX [TerminalView](https://github.com/Wramberg/TerminalView) would be great.
 
 ## Installation
 
@@ -14,9 +16,11 @@ Download [Package Control](https://packagecontrol.io/) and use the *Package Cont
 ## Usage
 
  - **Open Terminal at File**
-     Press *ctrl+shift+t* on Windows and Linux, or *cmd+shift+t* on OS X
+     Press <kbd>ctrl</kbd>+<kbd>shift</kbd>+<kbd>t</kbd> on Windows and Linux, or *cmd+shift+t* on OS X
  - **Open Terminal at Project Folder**
-     Press *ctrl+alt+shift+t* on Windows and Linux, or *cmd+alt+shift+t* on OS X
+     Press <kbd>ctrl</kbd>+<kbd>alt</kbd>+<kbd>shift</kbd>+<kbd>t</kbd> on Windows and Linux, or *cmd+alt+shift+t* on OS X
+ - **Build in New Terminal**
+     Press <kbd>ctrl</kbd>+<kbd>shift</kbd>+<kbd>b</kbd> on Windows. Change to other keybindings if you want.
 
 In addition to the key bindings, terminals can also be opened via the editor context menu and the sidebar context menus.
 
