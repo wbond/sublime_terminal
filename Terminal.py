@@ -21,7 +21,10 @@ if sys.version_info >= (3,):
 else:
     installed_dir = os.path.basename(os.getcwd())
 
-def get_setting(key, default=None):
+def expandstr(s):
+    return os.path.expandvars(os.path.expanduser(setting))
+
+def get_setting(key, default=None, expand=False):
     settings = sublime.load_settings('Terminal.sublime-settings')
     os_specific_settings = {}
     if os.name == 'nt':
@@ -30,7 +33,15 @@ def get_setting(key, default=None):
         os_specific_settings = sublime.load_settings('Terminal (OSX).sublime-settings')
     else:
         os_specific_settings = sublime.load_settings('Terminal (Linux).sublime-settings')
-    return os_specific_settings.get(key, settings.get(key, default))
+    setting = os_specific_settings.get(key, settings.get(key, default))
+    if expand and setting:
+        if isinstance(setting, str):
+            setting = expandstr(setting)
+        elif isinstance(setting, list):
+            setting = list([expandstr(s) for s in setting])
+        else:
+            raise TypeError('Unsupported type for expansion in %s' % key)
+    return setting
 
 
 class TerminalSelector():
@@ -39,7 +50,7 @@ class TerminalSelector():
     @staticmethod
     def get():
         package_dir = os.path.join(sublime.packages_path(), installed_dir)
-        terminal = get_setting('terminal')
+        terminal = get_setting('terminal', expand=True)
         if terminal:
             dir, executable = os.path.split(terminal)
             if not dir:
@@ -186,7 +197,7 @@ class OpenTerminalCommand(sublime_plugin.WindowCommand, TerminalCommand):
             return
 
         if parameters is None:
-            parameters = get_setting('parameters', [])
+            parameters = get_setting('parameters', [], expand=True)
 
         if os.path.isfile(path):
             path = os.path.dirname(path)

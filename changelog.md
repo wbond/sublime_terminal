@@ -1,4 +1,8 @@
 # changelog
+## 1.19.0
+
+ - Allow settings to reference environment variables. Fixes #185
+
 ## 1.18.0
 
  - Added support for Elementary OS. Fixes #159
