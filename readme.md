@@ -44,7 +44,7 @@ Here are some example setups:
 ```js
 {
   // Replace with your own path to cmder.exe
-  "terminal": "C:\\Program Files\\cmder_mini\\cmder.exe",
+  "terminal": "%ProgramFiles%\\cmder_mini\\cmder.exe",
   "parameters": ["/START", "%CWD%"]
 }
 ```
