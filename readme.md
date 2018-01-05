@@ -25,7 +25,7 @@ In addition to the key bindings, terminals can also be opened via the editor con
 The default settings can be viewed by accessing the ***Preferences > Package Settings > Terminal > Settings – Default*** menu entry. To ensure settings are not lost when the package is upgraded, make sure all edits are saved to ***Settings – User***.
 
  - **terminal**
-     - The terminal to execute, will default to the OS default if blank. OS X users may enter *iTerm.sh* to launch iTerm if installed.
+     - The terminal to execute, will default to the OS default if blank. May contain environment variables, which, will be expanded. OS X users may enter *iTerm.sh* to launch iTerm if installed.
      - *Default:* ***""***
  - **parameters**
      - The parameters to pass to the terminal. These parameters will be used if no [custom parameters](#custom-parameters) are passed via a key binding.
@@ -107,7 +107,7 @@ The following is an example of passing the parameters *-T 'Custom Window Title'*
 }
 ```
 
-A parameter may also contain the *%CWD%* placeholder, which will be substituted with the current working directory the terminal was opened to.
+Parameters may contain environment variables, which will be expanded.  Additionally, a parameter may also contain the *%CWD%* placeholder, which will be substituted with the current working directory the terminal was opened to.
 
 ```json
 {
