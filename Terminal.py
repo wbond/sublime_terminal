@@ -168,6 +168,18 @@ class TerminalCommand():
                     else:
                         print('Unsupported environment variable type. Expected "str" or "unicode"', env[k])
 
+            if int(sublime.version()) >= 3000:
+                # Replace build system templates in the environment variables:
+                # http://sublimetext.info/docs/en/reference/build_systems.html
+                # https://www.sublimetext.com/docs/3/build_systems.html
+                vars=self.window.extract_variables()
+                for k, v in os.environ.items():
+                    vars[k] = v
+
+                for k in env_setting:
+                    if not env_setting[k] is None:
+                        env[k] = sublime.expand_variables(env_setting[k], vars)
+
             # Run our process
             subprocess.Popen(args, cwd=cwd, env=env)
 
