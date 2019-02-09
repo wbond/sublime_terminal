@@ -27,6 +27,7 @@ if [ -n "$EXTRA_CMD" ]; then
 		CD_CMD="$CD_CMD; and $EXTRA_CMD"
 	else
 		CD_CMD="$CD_CMD && $EXTRA_CMD"
+	fi
 fi
 
 echo $CD_CMD
