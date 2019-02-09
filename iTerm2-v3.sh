@@ -23,11 +23,10 @@ while [ "$1" != "" ]; do
 done
 
 if [ -n "$EXTRA_CMD" ]; then
-	echo "hi"
-	CD_CMD="$CD_CMD && $EXTRA_CMD"
 	if echo "$SHELL" | grep -E "/fish$" &> /dev/null; then
 		CD_CMD="$CD_CMD; and $EXTRA_CMD"
-	fi
+	else
+		CD_CMD="$CD_CMD && $EXTRA_CMD"
 fi
 
 echo $CD_CMD
