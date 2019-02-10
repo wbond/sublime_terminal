@@ -6,7 +6,7 @@ if echo "$SHELL" | grep -E "/fish$" &> /dev/null; then
 fi
 VERSION=$(sw_vers -productVersion)
 OPEN_IN_TAB=0
-EXTRA_CMD=0
+EXTRA_CMD=""
 
 while [ "$1" != "" ]; do
 	PARAM="$1"
