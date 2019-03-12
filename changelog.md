@@ -1,4 +1,8 @@
 # changelog
+## 1.19.0
+
+ - Added support for Hyper via @berkandirim in #205. Fixes #174
+
 ## 1.18.0
 
  - Added support for Elementary OS. Fixes #159
