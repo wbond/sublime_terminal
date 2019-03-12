@@ -91,6 +91,14 @@ Here are some example setups:
 }
 ```
 
+#### Hyper on OS X
+
+```js
+{
+  "terminal": "hyper.sh"
+}
+```
+
 ## Custom Parameters
 
 With the parameters argument to the *open_terminal* and *open_terminal_project_folder* commands, it is possible to construct custom terminal environments.
