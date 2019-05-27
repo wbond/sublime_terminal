@@ -180,7 +180,7 @@ class TerminalCommand():
 
 
 class OpenTerminalCommand(sublime_plugin.WindowCommand, TerminalCommand):
-    def run(self, paths=[], terminal=None, parameters=None):
+    def run(self, paths=[], parameters=None, terminal=None):
         path = self.get_path(paths)
         if not path:
             return
