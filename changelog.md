@@ -1,4 +1,8 @@
 # changelog
+## 1.20.0
+
+- Added support for specifying terminal on per-command basis via @PinataMostGrim in #206. Fixes #16 and #197
+
 ## 1.19.0
 
  - Added support for Hyper via @berkandirim in #205. Fixes #174
