@@ -1,4 +1,8 @@
 # changelog
+## 1.23.0
+
+- Fixed iTerm2 directory on first call via @kitsguru in #210
+
 ## 1.22.0
 
 - Reverted "Fixed iTerm2 execution via @luisc09 in #207" due to causing breaking changes elsewhere
