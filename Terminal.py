@@ -130,8 +130,11 @@ class TerminalCommand():
         elif self.window.folders():
             return self.window.folders()[0]
         else:
-            sublime.error_message('Terminal: No place to open terminal to')
-            return False
+            try:
+                return os.path.expanduser("~")
+            except:
+                sublime.error_message('Terminal: No place to open terminal to')
+                return False
 
     def run_terminal(self, dir_, terminal, parameters):
         try:
