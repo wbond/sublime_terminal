@@ -141,7 +141,7 @@ class TerminalCommand():
                     else:
                         return os.path.expanduser("~")
 
-            sublime.error_message('Terminal: No place to open terminal to')
+            sublime.error_message('To open a terminal, you must first have an active saved file/folder. Couldn\'t find a path.')
             return False
 
     def run_terminal(self, dir_, terminal, parameters):

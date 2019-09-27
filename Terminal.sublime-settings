@@ -16,7 +16,7 @@
 
 	// A setting to select what to do if no path is found to open the terminal in.
 	// From highest priority to lowerst priority, options can be:
-	// - project (For files: tries to fall back to project folder)
+	// - project (For files: tries to fall back to first project folder)
 	// - home (Can be set with homedir below: if empty, defaults to user's home directory)
 	// Note that if all options fail, it will do nothing but open a error message.
 	"fallback_solutions": ["project", "home"],
