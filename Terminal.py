@@ -125,12 +125,23 @@ class TerminalCommand():
             return paths[0]
         # DEV: On ST3, there is always an active view.
         #   Be sure to check that it's a file with a path (not temporary view)
-        elif self.window.active_view() and self.window.active_view().file_name():
+        if self.window.active_view() and self.window.active_view().file_name():
             return self.window.active_view().file_name()
-        elif self.window.folders():
-            return self.window.folders()[0]
+            
         else:
-            sublime.error_message('Terminal: No place to open terminal to')
+            fallback_solutions = get_setting('fallback_solutions', [])
+            for solution in fallback_solutions:
+                if solution == "project":
+                    if self.window.folders():
+                        return self.window.folders()[0]
+                elif solution == "home":
+                    home_folder = get_setting("homedir", "")
+                    if home_folder is not "":
+                        return home_folder
+                    else:
+                        return os.path.expanduser("~")
+
+            sublime.error_message('To open a terminal, you must first have an active saved file/folder. Couldn\'t find a path.')
             return False
 
     def run_terminal(self, dir_, terminal, parameters):
