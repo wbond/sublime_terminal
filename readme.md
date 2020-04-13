@@ -99,6 +99,16 @@ Here are some example setups:
 }
 ```
 
+#### [Windows Terminal](https://github.com/microsoft/terminal)
+
+```js
+{
+  "terminal": "C:/Users/yourusername/AppData/Local/Microsoft/WindowsApps/wt.exe",
+  "parameters": ["-d", "."]
+}
+```
+
+
 ## Custom Parameters
 
 With the parameters argument to the *open_terminal* and *open_terminal_project_folder* commands, it is possible to construct custom terminal environments.
