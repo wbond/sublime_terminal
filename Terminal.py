@@ -1,3 +1,4 @@
+from collections import Mapping, Sequence
 import sublime
 import sublime_plugin
 import os
@@ -30,8 +31,27 @@ def get_setting(key, default=None):
         os_specific_settings = sublime.load_settings('Terminal (OSX).sublime-settings')
     else:
         os_specific_settings = sublime.load_settings('Terminal (Linux).sublime-settings')
-    return os_specific_settings.get(key, settings.get(key, default))
+    return substitute_variables(os_specific_settings.get(key, settings.get(key, default)))
 
+def substitute_variables(value, variables=sublime.active_window().extract_variables()):
+    # type: (Mapping, Any) -> Any
+    # Utilizes Sublime Text's `expand_variables` API, which uses the
+    # `${varname}` syntax and supports placeholders (`${varname:placeholder}`).
+
+    if isinstance(value, str):
+        # Workaround https://github.com/SublimeTextIssues/Core/issues/1878
+        # (E.g. UNC paths on Windows start with double slashes.)
+        value = value.replace(r'\\', r'\\\\')
+        value = sublime.expand_variables(value, variables)
+        return os.path.expanduser(value)
+    elif isinstance(value, Mapping):
+        return {key: substitute_variables(val, variables)
+                for key, val in value.items()}
+    elif isinstance(value, Sequence):
+        return [substitute_variables(item, variables)
+                for item in value]
+    else:
+        return value
 
 class TerminalSelector():
     default = None
@@ -190,6 +210,8 @@ class OpenTerminalCommand(sublime_plugin.WindowCommand, TerminalCommand):
 
         if parameters is None:
             parameters = get_setting('parameters', [])
+        else:
+            parameters = substitute_variables(parameters);
 
         if os.path.isfile(path):
             path = os.path.dirname(path)
