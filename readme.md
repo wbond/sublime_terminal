@@ -99,6 +99,16 @@ Here are some example setups:
 }
 ```
 
+#### Kitty on OS X
+
+```js
+{
+  // Replace with your own path to kitty
+  "terminal": "/opt/homebrew/bin/kitty",
+  "parameters": ["-d", "%CWD%"]
+}
+```
+
 #### [Windows Terminal](https://github.com/microsoft/terminal)
 
 ```js
