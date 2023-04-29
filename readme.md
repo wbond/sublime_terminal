@@ -96,6 +96,15 @@ We unset LD_PRELOAD, as it may cause problems for Sublime Text with imfix.
 }
 ```
 
+#### Kitty on OS X
+
+```json
+{
+  "terminal": "/opt/homebrew/bin/kitty",
+  "parameters": ["-d", "%CWD%"]
+}
+```
+
 #### [Windows Terminal](https://github.com/microsoft/terminal)
 
 ```json
