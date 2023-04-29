@@ -1,8 +1,0 @@
-Sublime Terminal 1.8.0 Changelog:
-- Added support for opening a new tab in iTerm via @vitorhsb in #72
-    - https://github.com/wbond/sublime_terminal/pull/72
-    - If you are using the `iTerm.sh` as your terminal, this can be configured via:
-        {
-          "terminal": "iTerm.sh",
-          "parameters": ["--open-in-tab"]
-        }
