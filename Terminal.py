@@ -23,14 +23,11 @@ def get_setting(key, default=None):
     settings = sublime.load_settings('Terminal.sublime-settings')
     os_specific_settings = {}
     if os.name == 'nt':
-        os_specific_settings = sublime.load_settings(
-            'Terminal (Windows).sublime-settings')
+        os_specific_settings = sublime.load_settings('Terminal (Windows).sublime-settings')
     elif sys.platform == 'darwin':
-        os_specific_settings = sublime.load_settings(
-            'Terminal (OSX).sublime-settings')
+        os_specific_settings = sublime.load_settings('Terminal (OSX).sublime-settings')
     else:
-        os_specific_settings = sublime.load_settings(
-            'Terminal (Linux).sublime-settings')
+        os_specific_settings = sublime.load_settings('Terminal (Linux).sublime-settings')
     return os_specific_settings.get(key, settings.get(key, default))
 
 
@@ -40,46 +37,34 @@ def powershell(package_dir):
     # from cmd.exe. Normally the size and color are inherited
     # from cmd.exe, but this creates a custom mapping, and then
     # the LaunchPowerShell.bat file adjusts some other settings.
-    key_string = 'Console\\%SystemRoot%_system32_WindowsPowerShell_v1.0_powershell.exe'  # noqa: E501
+    key_string = 'Console\\%SystemRoot%_system32_WindowsPowerShell_v1.0_powershell.exe'
     try:
         key = _winreg.OpenKey(_winreg.HKEY_CURRENT_USER, key_string)
     except (WindowsError):
         key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER, key_string)
-        _winreg.SetValueEx(
-            key,
-            'ColorTable05',
-            0,
-            _winreg.REG_DWORD,
-            5645313)
-        _winreg.SetValueEx(
-            key,
-            'ColorTable06',
-            0,
-            _winreg.REG_DWORD,
-            15789550)
+        _winreg.SetValueEx(key, 'ColorTable05', 0, _winreg.REG_DWORD, 5645313)
+        _winreg.SetValueEx(key, 'ColorTable06', 0, _winreg.REG_DWORD, 15789550)
     default = os.path.join(package_dir, 'PS.bat')
     sublime_terminal_path = os.path.join(
         sublime.packages_path(), INSTALLED_DIR)
     # This should turn the path into an 8.3-style path,
     # getting around unicode issues and spaces
     buf = create_unicode_buffer(512)
-    if windll.kernel32.GetShortPathNameW(
-        sublime_terminal_path, buf, len(buf)
-    ):
+    if windll.kernel32.GetShortPathNameW(sublime_terminal_path, buf, len(buf)):
         sublime_terminal_path = buf.value
-    os.environ['sublime_terminal_path'] = sublime_terminal_path.replace(' ', '` ')  # noqa: E501
+    os.environ['sublime_terminal_path'] = sublime_terminal_path.replace(' ', '` ')
 
     return default
 
 
 def linux_terminal():
-    ps = 'ps -eo comm,args | grep -E "^(gnome-session|ksmserver|xfce4-session|lxsession|mate-panel|cinnamon-sessio)" | grep -v grep'  # noqa
+    ps = 'ps -eo comm,args | grep -E "^(gnome-session|ksmserver|xfce4-session|lxsession|mate-panel|cinnamon-sessio)" | grep -v grep'  # noqa: E501
     wm = [x.replace("\n", '') for x in os.popen(ps)]
     if wm:
-        # elementary OS: `/usr/lib/gnome-session/gnome-session-binary --session=pantheon`  # noqa: E501
+        # elementary OS: `/usr/lib/gnome-session/gnome-session-binary --session=pantheon`
         # Gnome: `gnome-session` or `gnome-session-binary`
         # Linux Mint Cinnamon: `cinnamon-session --session cinnamon`
-        if wm[0].startswith('gnome-session') or wm[0].startswith('cinnamon-session'):  # noqa: E501
+        if wm[0].startswith('gnome-session') or wm[0].startswith('cinnamon-session'):
             if 'pantheon' in wm[0]:
                 return 'pantheon-terminal'
             return 'gnome-terminal'
@@ -119,10 +104,7 @@ class TerminalSelector():
         default = None
 
         if os.name == 'nt':
-            if os.path.exists(
-                os.environ['SYSTEMROOT'] +
-                '\\System32\\WindowsPowerShell\\v1.0\\powershell.exe'
-            ):
+            if os.path.exists(os.environ['SYSTEMROOT'] + '\\System32\\WindowsPowerShell\\v1.0\\powershell.exe'):
                 default = powershell(package_dir)
             else:
                 default = os.environ['SYSTEMROOT'] + '\\System32\\cmd.exe'
@@ -180,8 +162,7 @@ class TerminalCommand():
 
         except (OSError) as exception:
             print(str(exception))
-            sublime.error_message('Terminal: The terminal ' +
-                                  TerminalSelector.get() + ' was not found')
+            sublime.error_message('Terminal: The terminal ' + TerminalSelector.get() + ' was not found')
         except (Exception) as exception:
             sublime.error_message('Terminal: ' + str(exception))
 
@@ -209,8 +190,7 @@ class OpenTerminalCommand(sublime_plugin.WindowCommand, TerminalCommand):
         self.run_terminal(path, terminal, parameters)
 
 
-class OpenTerminalProjectFolderCommand(sublime_plugin.WindowCommand,
-                                       TerminalCommand):
+class OpenTerminalProjectFolderCommand(sublime_plugin.WindowCommand, TerminalCommand):
     def is_visible(self):
         # remove the command if the current window doesn't have directories
         # i.e. it's a single file (use the other command)
@@ -225,7 +205,7 @@ class OpenTerminalProjectFolderCommand(sublime_plugin.WindowCommand,
         # We require separator to be appended since /hello and /hello-world
         # would both match a file in `/hello` without it
         # See https://github.com/wbond/sublime_terminal/issues/86
-        folders = [x for x in self.window.folders() if path.find(x + os.sep) == 0][0:1]  # noqa: E501
+        folders = [x for x in self.window.folders() if path.find(x + os.sep) == 0][0:1]
 
         command = OpenTerminalCommand(self.window)
         command.run(folders, parameters=parameters)
