@@ -82,15 +82,14 @@ def linux_terminal():
         if wm[0].startswith('gnome-session') or wm[0].startswith('cinnamon-session'):  # noqa: E501
             if 'pantheon' in wm[0]:
                 return 'pantheon-terminal'
-            else:
-                return 'gnome-terminal'
-        elif wm[0].startswith('xfce4-session'):
+            return 'gnome-terminal'
+        if wm[0].startswith('xfce4-session'):
             return 'xfce4-terminal'
-        elif wm[0].startswith('ksmserver'):
+        if wm[0].startswith('ksmserver'):
             return 'konsole'
-        elif wm[0].startswith('lxsession'):
+        if wm[0].startswith('lxsession'):
             return 'lxterminal'
-        elif wm[0].startswith('mate-panel'):
+        if wm[0].startswith('mate-panel'):
             return 'mate-terminal'
 
     # nothing specific found, return a default
