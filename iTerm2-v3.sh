@@ -18,19 +18,25 @@ while [ "$1" != "" ]; do
 	shift
 done
 
-if (( $(expr $VERSION '<' 10.7) )); then
-	RUNNING=$(osascript<<END
-	tell application "System Events"
-		count(processes whose name is "iTerm2")
-	end tell
+RUNNING=$(osascript<<END
+tell application "System Events"
+	count(processes whose name is "iTerm2")
+end tell
 END
 )
-else
-	RUNNING=1
-fi
 
-if (( ! $RUNNING )); then
+if (( $RUNNING == 0 )); then
 	osascript<<END
+	tell application "iTerm"
+		tell current window
+            activate
+			tell current session
+				write text "$CD_CMD"
+			end tell
+		end tell
+	end tell
+END
+osascript<<END
 	tell application "iTerm"
 		tell current window
             activate
@@ -57,7 +63,6 @@ else
 			tell theSession
 				write text "$CD_CMD"
 			end tell
-
 			activate
 		end tell
 EOF
@@ -69,7 +74,6 @@ EOF
 					write text "$CD_CMD"
 				end tell
 			end tell
-
 			activate
 		end tell
 EOF
