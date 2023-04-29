@@ -142,27 +142,28 @@ class TerminalSelector():
 
 class TerminalCommand():
     def get_path(self, paths):
-        # DEV: On ST3, there is always an active view.
-        # Be sure to check that it's a file with a path (not temporary view)
         view = self.window.active_view()
 
         if paths:
+            # a path has been passed to the command (ie. a context)
             return paths[0]
-        elif view and view.file_name():
-            return view.file_name()
-        elif self.window.folders():
-            return self.window.folders()[0]
-        else:
-            sublime.error_message('Terminal: No place to open terminal to')
-            return False
 
-    def run_terminal(self, dir_, terminal, parameters):
+        if view and view.file_name():
+            # check that the file actually exists on disk
+            return view.file_name()
+
+        if self.window.folders():
+            # default to the first project directory, if it exists
+            return self.window.folders()[0]
+
+        # finally fall back to the user home directory
+        sublime.status_message('Terminal: opening at home directory')
+        return os.path.expanduser('~')
+
+    def run_terminal(self, dir, terminal, parameters):
         try:
-            if not dir_:
-                raise NotFoundError('The file open in the selected view has ' +
-                                    'not yet been saved')
             for k, v in enumerate(parameters):
-                parameters[k] = v.replace('%CWD%', dir_)
+                parameters[k] = v.replace('%CWD%', dir)
             args = [TerminalSelector.get(terminal)]
             args.extend(parameters)
 
@@ -176,7 +177,7 @@ class TerminalCommand():
                     env[k] = env_setting[k]
 
             # Run our process
-            subprocess.Popen(args, cwd=dir_, env=env)
+            subprocess.Popen(args, cwd=dir, env=env)
 
         except (OSError) as exception:
             print(str(exception))
@@ -189,8 +190,6 @@ class TerminalCommand():
 class OpenTerminalCommand(sublime_plugin.WindowCommand, TerminalCommand):
     def run(self, paths=[], parameters=None, terminal=None):
         path = self.get_path(paths)
-        if not path:
-            return
 
         if terminal is None:
             terminal = 'terminal'
