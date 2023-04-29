@@ -1,4 +1,4 @@
 [
     { "caption": "-", "id": "file" },
-    { "command": "open_terminal", "caption": "Open Terminal Here…" }
+    { "command": "open_terminal", "caption": "Open Terminal Here" }
 ]
