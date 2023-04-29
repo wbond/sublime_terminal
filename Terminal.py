@@ -40,7 +40,7 @@ def powershell(package_dir):
     # from cmd.exe. Normally the size and color are inherited
     # from cmd.exe, but this creates a custom mapping, and then
     # the LaunchPowerShell.bat file adjusts some other settings.
-    key_string = 'Console\\%SystemRoot%_system32_WindowsPowerShell_v1.0_powershell.exe'  # noqa
+    key_string = 'Console\\%SystemRoot%_system32_WindowsPowerShell_v1.0_powershell.exe'  # noqa: E501
     try:
         key = _winreg.OpenKey(_winreg.HKEY_CURRENT_USER, key_string)
     except (WindowsError):
@@ -67,7 +67,7 @@ def powershell(package_dir):
         sublime_terminal_path, buf, len(buf)
     ):
         sublime_terminal_path = buf.value
-    os.environ['sublime_terminal_path'] = sublime_terminal_path.replace(' ', '` ')  # noqa
+    os.environ['sublime_terminal_path'] = sublime_terminal_path.replace(' ', '` ')  # noqa: E501
 
     return default
 
@@ -76,10 +76,10 @@ def linux_terminal():
     ps = 'ps -eo comm,args | grep -E "^(gnome-session|ksmserver|xfce4-session|lxsession|mate-panel|cinnamon-sessio)" | grep -v grep'  # noqa
     wm = [x.replace("\n", '') for x in os.popen(ps)]
     if wm:
-        # elementary OS: `/usr/lib/gnome-session/gnome-session-binary --session=pantheon`  # noqa
+        # elementary OS: `/usr/lib/gnome-session/gnome-session-binary --session=pantheon`  # noqa: E501
         # Gnome: `gnome-session` or `gnome-session-binary`
         # Linux Mint Cinnamon: `cinnamon-session --session cinnamon`
-        if wm[0].startswith('gnome-session') or wm[0].startswith('cinnamon-session'):  # noqa
+        if wm[0].startswith('gnome-session') or wm[0].startswith('cinnamon-session'):  # noqa: E501
             if 'pantheon' in wm[0]:
                 return 'pantheon-terminal'
             else:
@@ -226,7 +226,7 @@ class OpenTerminalProjectFolderCommand(sublime_plugin.WindowCommand,
         # We require separator to be appended since /hello and /hello-world
         # would both match a file in `/hello` without it
         # See https://github.com/wbond/sublime_terminal/issues/86
-        folders = [x for x in self.window.folders() if path.find(x + os.sep) == 0][0:1]  # noqa
+        folders = [x for x in self.window.folders() if path.find(x + os.sep) == 0][0:1]  # noqa: E501
 
         command = OpenTerminalCommand(self.window)
         command.run(folders, parameters=parameters)
