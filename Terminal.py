@@ -16,10 +16,8 @@ class NotFoundError(Exception):
     pass
 
 
-if sys.version_info >= (3,):
-    installed_dir, _ = __name__.split('.')
-else:
-    installed_dir = os.path.basename(os.getcwd())
+INSTALLED_DIR = __name__.split('.')[0]
+
 
 def get_setting(key, default=None):
     settings = sublime.load_settings('Terminal.sublime-settings')
@@ -38,7 +36,7 @@ class TerminalSelector():
 
     @staticmethod
     def get(terminal_key):
-        package_dir = os.path.join(sublime.packages_path(), installed_dir)
+        package_dir = os.path.join(sublime.packages_path(), INSTALLED_DIR)
         terminal = get_setting(terminal_key)
         if terminal:
             dir, executable = os.path.split(terminal)
@@ -76,7 +74,7 @@ class TerminalSelector():
                     _winreg.SetValueEx(key, 'ColorTable06', 0,
                         _winreg.REG_DWORD, 15789550)
                 default = os.path.join(package_dir, 'PS.bat')
-                sublime_terminal_path = os.path.join(sublime.packages_path(), installed_dir)
+                sublime_terminal_path = os.path.join(sublime.packages_path(), INSTALLED_DIR)
                 # This should turn the path into an 8.3-style path, getting around unicode
                 # issues and spaces
                 buf = create_unicode_buffer(512)
