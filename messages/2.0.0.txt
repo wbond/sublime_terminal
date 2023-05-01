@@ -1,0 +1,10 @@
+Terminal 2.0
+
+The terminal package has seen a little make-over.
+Nothing major you should notice, except:
+
+Key bindings are no longer enabled by default.
+
+The original key bindings were masking built-in binding of Sublime Text itself.
+To restore the bindings, or create different ones, edit your bindings file:
+Preferences > Package Settings > Terminal > Key Bindings
