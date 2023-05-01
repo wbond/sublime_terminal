@@ -10,16 +10,27 @@ Download [Package Control](https://packagecontrol.io/) and use the *Package Cont
 
 - **Open Terminal at File**
   Opens a terminal in the folder containing the currently opened file.  
-  Press `ctrl+shift+t` on Windows and Linux, or `cmd+shift+t` on MacOS.
 - **Open Terminal at Project Folder**
   Opens a terminal in the project folder containing the currently opened file.  
-  Press `ctrl+alt+shift+t` on Windows and Linux, or `cmd+alt+shift+t` on MacOS.
 
-In addition to the key bindings, terminals can also be opened via the editor context menu and the sidebar context menus.
+Terminals can be opened via the command palette, the editor context menu and the sidebar context menus. Additionally, you can set up key bindings.
+
+### Key bindings
+
+To create keyboard shortcuts, open the *Preferences > Package Settings > Terminal > Key Bindings* menu entry. Our suggested key bindings are on the left, you can copy these over to your personal bindings on the right and tweak them to your liking. Example:
+
+```json
+[
+  { "keys": ["super+shift+t"], "command": "open_terminal" },
+  { "keys": ["super+shift+alt+t"], "command": "open_terminal_project_folder" }
+]
+```
+
+Note that in version 2 of this package, we stopped enabling these bindings by default. They conflicted with built-in bindings of Sublime Text, and users might have different preferences.
 
 ## Package Settings
 
-The settings can be viewed and edited by accessing the *Preferences > Package Settings > Terminal > Settings** menu entry. 
+The settings can be viewed and edited by accessing the *Preferences > Package Settings > Terminal > Settings* menu entry. 
 
  - **terminal**
      - The terminal to execute, will default to the OS default if blank.
