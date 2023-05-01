@@ -15,7 +15,7 @@
                                 "caption": "Settings",
                                 "command": "edit_settings",
                                 "args": {
-                                    "file": "${packages}/Terminal/Terminal.sublime-settings",
+                                    "base_file": "${packages}/Terminal/Terminal.sublime-settings",
                                     "default": "// Terminal Settings - User\n{\n\t$0\n}\n",
                                 }
                             },

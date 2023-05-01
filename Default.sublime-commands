@@ -1,64 +1,27 @@
 [
     {
-        "caption": "Preferences: Terminal Settings – Default",
-        "command": "open_file",
+        "caption": "Preferences: Terminal Settings",
+        "command": "edit_settings",
         "args": {
-            "file": "${packages}/Terminal/Terminal.sublime-settings"
+            "base_file": "${packages}/Terminal/Terminal.sublime-settings",
+            "default": "// Terminal Settings - User\n{\n\t$0\n}\n",
         }
     },
     {
-        "caption": "Preferences: Terminal Settings – User",
-        "command": "open_file",
+        "caption": "Preferences: Terminal OS Specific Settings",
+        "command": "edit_settings",
         "args": {
-            "file": "${packages}/User/Terminal.sublime-settings"
+            "base_file": "${packages}/Terminal/Terminal.sublime-settings",
+            "user_file": "${packages}/User/Terminal ($platform).sublime-settings",
+            "default": "// Terminal OS Specific Settings - User\n{\n\t$0\n}\n"
         }
     },
     {
-        "caption": "Preferences: Terminal Key Bindings – Default",
-        "command": "open_file",
+        "caption": "Preferences: Terminal Key Bindings",
+        "command": "edit_settings",
         "args": {
-            "file": "${packages}/Terminal/Default (Windows).sublime-keymap",
-            "platform": "Windows"
-        }
-    },
-    {
-        "caption": "Preferences: Terminal Key Bindings – Default",
-        "command": "open_file",
-        "args": {
-            "file": "${packages}/Terminal/Default (OSX).sublime-keymap",
-            "platform": "OSX"
-        }
-    },
-    {
-        "caption": "Preferences: Terminal Key Bindings – Default",
-        "command": "open_file",
-        "args": {
-            "file": "${packages}/Terminal/Default (Linux).sublime-keymap",
-            "platform": "Linux"
-        }
-    },
-    {
-        "caption": "Preferences: Terminal Key Bindings – User",
-        "command": "open_file",
-        "args": {
-            "file": "${packages}/User/Default (Windows).sublime-keymap",
-            "platform": "Windows"
-        }
-    },
-    {
-        "caption": "Preferences: Terminal Key Bindings – User",
-        "command": "open_file",
-        "args": {
-            "file": "${packages}/User/Default (OSX).sublime-keymap",
-            "platform": "OSX"
-        }
-    },
-    {
-        "caption": "Preferences: Terminal Key Bindings – User",
-        "command": "open_file",
-        "args": {
-            "file": "${packages}/User/Default (Linux).sublime-keymap",
-            "platform": "Linux"
+            "base_file": "${packages}/Terminal/Default ($platform).sublime-keymap",
+            "default": "[\n\t$0\n]\n"
         }
     },
     {
