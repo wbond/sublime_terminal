@@ -168,12 +168,12 @@ class TerminalCommand():
 
 
 class OpenTerminalCommand(sublime_plugin.WindowCommand, TerminalCommand):
-    def is_visible(self):
+    def is_visible(self, paths=[]):
         # remove the command if the view doesn't have a path to open at
         # taking is_visible over is_enabled to remove it from the context menu,
         # instead of simply disabling the entry
         view = self.window.active_view()
-        return bool(view and view.file_name())
+        return bool(view and view.file_name() or paths)
 
     def run(self, paths=[], parameters=None, terminal=None):
         path = self.get_path(paths)
