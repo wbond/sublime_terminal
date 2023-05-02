@@ -89,8 +89,8 @@ class TerminalSelector():
         package_dir = os.path.join(sublime.packages_path(), INSTALLED_DIR)
         terminal = get_setting(terminal_key)
         if terminal:
-            dir, executable = os.path.split(terminal)
-            if not dir:
+            path, executable = os.path.split(terminal)
+            if not path:
                 joined_terminal = os.path.join(package_dir, executable)
                 if os.path.exists(joined_terminal):
                     terminal = joined_terminal
@@ -141,10 +141,10 @@ class TerminalCommand():
         sublime.status_message('Terminal: opening at home directory')
         return os.path.expanduser('~')
 
-    def open_terminal(self, dir, terminal, parameters):
+    def open_terminal(self, location, terminal, parameters):
         try:
             for k, v in enumerate(parameters):
-                parameters[k] = v.replace('%CWD%', dir)
+                parameters[k] = v.replace('%CWD%', location)
             args = [TerminalSelector.get(terminal)]
             args.extend(parameters)
 
@@ -158,7 +158,7 @@ class TerminalCommand():
                     env[k] = env_setting[k]
 
             # Run our process
-            subprocess.Popen(args, cwd=dir, env=env)
+            subprocess.Popen(args, cwd=location, env=env)
 
         except (OSError) as exception:
             print(str(exception))
